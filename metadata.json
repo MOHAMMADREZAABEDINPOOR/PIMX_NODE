@@ -1,0 +1,6 @@
+{
+  "name": "PIMXNODE",
+  "description": "Secure, serverless WebRTC peer-to-peer file sharing with end-to-end encryption and room matching.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
