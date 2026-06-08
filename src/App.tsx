@@ -386,23 +386,17 @@ export default function App() {
     if (!isANow) {
       try {
         const stored = localStorage.getItem("pimx_visits");
-        let visits = stored ? JSON.parse(stored) : [];
-        
-        // If first launch, generate incredibly detailed mock records mimicking organic historical loads
-        if (visits.length === 0) {
-          const devices = ["Android", "iPhone", "iPad", "macOS", "Linux", "Windows"];
-          const names = ["Raptor PC", "iPhone-15", "Corporate MAC", "Samsung-S24", "Linux-Server", "Home Desktop", "John-iPad", "Work Station"];
-          const roomsPool = ["room-x9a2", "room-h127", "room-f982", "room-z333", "room-p418"];
-          const curr = Date.now();
-          
-          for (let i = 45; i >= 0; i--) {
-            // Distribute visits over the past days/hours
-            visits.push({
-              timestamp: curr - i * 4 * 3600000 - Math.random() * 1200000,
-              device: devices[Math.floor(Math.random() * devices.length)],
-              roomId: roomsPool[Math.floor(Math.random() * roomsPool.length)],
-              peerName: names[Math.floor(Math.random() * names.length)]
-            });
+        let visits = [];
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored);
+            // Clear mock files by checking for mock peer names to ensure 105% real data starting now
+            const holdsMock = parsed.some((p: any) => ["Raptor PC", "iPhone-15", "Corporate MAC", "Samsung-S24", "Linux-Server", "Home Desktop", "John-iPad", "Work Station"].includes(p.peerName));
+            if (!holdsMock) {
+              visits = parsed;
+            }
+          } catch (e) {
+            visits = [];
           }
         }
 
@@ -1138,6 +1132,9 @@ export default function App() {
         setTheme={setTheme}
         lang={lang}
         setLang={setLang}
+        activePeersCount={discoveredPeers.length}
+        sessionTransfersCount={Object.keys(transfers).length}
+        sessionTransfersVolume={(Object.values(transfers) as any[]).reduce((acc: number, t: any) => acc + (t.status === "completed" ? t.size : 0), 0)}
         onClose={() => {
           setShowAdmin(false);
           if (typeof window !== "undefined") {
@@ -2040,41 +2037,73 @@ export default function App() {
                       {
                         label_fa: "نوع مسیر شبکه",
                         label_en: "Connection Route Type",
-                        lan: "حلقه محلی (Wifi/LAN)",
-                        wifi_stun: "جهانی با سوراخ‌کاری STUN",
-                        mobile_5g: "شبکه موبایل CGNAT",
-                        nat_symmetric: "مسدودیت فایروال شرکتی",
+                        fa: {
+                          lan: "حلقه محلی (Wifi/LAN)",
+                          wifi_stun: "جهانی با سوراخ‌کاری STUN",
+                          mobile_5g: "شبکه موبایل CGNAT",
+                          nat_symmetric: "مسدودیت فایروال شرکتی"
+                        },
+                        en: {
+                          lan: "Local Loopback (Wi-Fi/LAN)",
+                          wifi_stun: "Global STUN Discovery",
+                          mobile_5g: "Cellular CGNAT Gate",
+                          nat_symmetric: "Corporate Firewall Block"
+                        },
                         color: "text-slate-205 dark:text-slate-200"
                       },
                       {
                         label_fa: "ترافیک اینترنت مصرفی",
                         label_en: "Internet Data Cost",
-                        lan: "۰٪ کاملاً رایگان محلی",
-                        wifi_stun: "ترافیک عادی فایل همتا",
-                        mobile_5g: "مصرف ترافیک اینترنت همراه",
-                        nat_symmetric: "بدون انتقال (مستلزم هات‌اسپات)",
+                        fa: {
+                          lan: "۰٪ کاملاً رایگان محلی",
+                          wifi_stun: "ترافیک عادی فایل همتا",
+                          mobile_5g: "مصرف ترافیک اینترنت همراه",
+                          nat_symmetric: "بدون انتقال (مستلزم هات‌اسپات)"
+                        },
+                        en: {
+                          lan: "0% Free (Local Loop)",
+                          wifi_stun: "Standard Peer WAN Data",
+                          mobile_5g: "Cellular Mobile Plan Data",
+                          nat_symmetric: "None (Hotspot Needed)"
+                        },
                         color: "text-emerald-450 dark:text-emerald-450"
                       },
                       {
                         label_fa: "پهنای باند فرضی سرعت",
                         label_en: "Expected Speed Rate",
-                        lan: "بالای ۱۰۰ مگابایت بر ثانیه (نامحدود)",
-                        wifi_stun: "۵ الی ۳۰ مگابایت بر ثانیه",
-                        mobile_5g: "۲ الی ۱۰ مگابایت بر ثانیه",
-                        nat_symmetric: "صفر (سیگنالینگ رد شد)",
+                        fa: {
+                          lan: "بالای ۱۰۰ مگابایت بر ثانیه (نامحدود)",
+                          wifi_stun: "۵ الی ۳۰ مگابایت بر ثانیه",
+                          mobile_5g: "۲ الی ۱۰ مگابایت بر ثانیه",
+                          nat_symmetric: "صفر (سیگنالینگ رد شد)"
+                        },
+                        en: {
+                          lan: "100+ MB/s (LAN Direct)",
+                          wifi_stun: "5 to 30 MB/s (WAN Speed)",
+                          mobile_5g: "2 to 10 MB/s (Cellular)",
+                          nat_symmetric: "0 KB/s (Connection Blocked)"
+                        },
                         color: "text-cyan-450 dark:text-cyan-400"
                       },
                       {
                         label_fa: "پایداری قطعی اتصال",
                         label_en: "Success & Stability",
-                        lan: "۹۹.۹٪ (اتصال مادام‌العمر محلی)",
-                        wifi_stun: "۹۰٪ الی ۹۵٪ عالی",
-                        mobile_5g: "۷۵٪ الی ۸۵٪ متوسط متحرک",
-                        nat_symmetric: "امکان‌پذیر نیست (نیاز به همراه)",
+                        fa: {
+                          lan: "۹۹.۹٪ (اتصال مادام‌العمر محلی)",
+                          wifi_stun: "۹۰٪ الی ۹۵٪ عالی",
+                          mobile_5g: "۷۵٪ الی ۸۵٪ متوسط متحرک",
+                          nat_symmetric: "امکان‌پذیر نیست (نیاز به همراه)"
+                        },
+                        en: {
+                          lan: "99.9% (Lifetime Local)",
+                          wifi_stun: "90% to 95% (Excellent)",
+                          mobile_5g: "75% to 85% (Average)",
+                          nat_symmetric: "Failed (Cell Dynamic Req.)"
+                        },
                         color: "text-amber-550 dark:text-amber-400"
                       }
                     ].map((metric, idx) => {
-                      const value = metric[selectedNatScenario];
+                      const value = lang === "fa" ? metric.fa[selectedNatScenario] : metric.en[selectedNatScenario];
                       return (
                         <div key={idx} className={`p-4 rounded-xl border ${
                           theme === "dark" ? "bg-slate-950/20 border-slate-850" : "bg-white border-slate-205 shadow-3xs"
@@ -2933,6 +2962,21 @@ export default function App() {
       <footer className={`py-5 px-6 shrink-0 mt-auto border-t ${
         theme === "dark" ? "bg-slate-950 border-slate-900 text-slate-500" : "bg-slate-100 border-slate-200 text-slate-600"
       }`}>
+        {/* SEO Optimization Semantic Keyword Block targeting pimx / pimxnode */}
+        <div className="max-w-7xl mx-auto mb-4 border-b border-dashed border-slate-800/10 dark:border-slate-800/30 pb-4 text-center">
+          <p className="text-[10px] text-slate-400 dark:text-slate-500 font-sans tracking-wide leading-relaxed">
+            {lang === "fa" ? (
+              <>
+                <strong>PIMX (پیمکس)</strong> و <strong>PIMXNODE (پیمکس نود)</strong> سریع‌ترین شبکه کاملاً مستقیم و بدون سرور همتا به همتای جهان (P2P) است. اتصال ایمن، بدون ردپا و کاملاً محرمانه با فناوری انتقال پیشرفته مرورگر-به-مرورگر رمزنگاری‌شده در سراسر وب برای ارسال و دریافت امن فایل‌ها فراهم شده است. برای دستیابی به حداکثر سرعت انتقال و پایداری در شبکه PIMX، از این پرتال کارآمد استفاده نمایید.
+              </>
+            ) : (
+              <>
+                Optimized for search engines, <strong>PIMX</strong> and <strong>PIMXNODE</strong> deliver the ultimate direct, storage-free serverless peer-to-peer (P2P) file transfer network. Utilizing secure, zero-hop WebRTC conduits encrypted end-to-end via AES-GCM, the PIMX network guarantees total containment and maximal sharing speed. Secure files, configure your pimxnode, and launch private client-to-client gateways instantly.
+              </>
+            )}
+          </p>
+        </div>
+
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-center md:text-right">
           <div className="flex items-center gap-2 text-center justify-center md:justify-start">
             <span className="font-sans text-[10px] sm:text-xs">

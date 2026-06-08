@@ -23,6 +23,9 @@ interface AdminPanelProps {
   setTheme: (t: "dark" | "light") => void;
   lang: "fa" | "en";
   setLang: (l: "fa" | "en") => void;
+  activePeersCount: number;
+  sessionTransfersCount: number;
+  sessionTransfersVolume: number;
   onClose: () => void;
 }
 
@@ -69,6 +72,9 @@ export default function AdminPanel({
   setTheme,
   lang,
   setLang,
+  activePeersCount,
+  sessionTransfersCount,
+  sessionTransfersVolume,
   onClose,
 }: AdminPanelProps) {
   const [username, setUsername] = useState("");
@@ -80,7 +86,6 @@ export default function AdminPanel({
 
   const [selectedRange, setSelectedRange] = useState("1_hour");
   const [systemLogs, setSystemLogs] = useState<any[]>([]);
-  const [livePeersCount, setLivePeersCount] = useState(0);
 
   // Authenticate Admin
   const handleLogin = (e: React.FormEvent) => {
@@ -112,61 +117,66 @@ export default function AdminPanel({
     } catch (e) {
       setSystemLogs([]);
     }
-
-    // Set mock peers count representing active signaling registry
-    setLivePeersCount(Math.floor(Math.random() * 8) + 3);
   }, [isAuthenticated]);
 
-  // Dynamic Generator to construct custom timeline trendlines for all intervals with perfect fidelity
+  // Genuine aggregator to construct live timeline charts based strictly on timestamps of actual visitor logs
   const getTimelineData = (range: string) => {
     const seedPoints: number[] = [];
-    let labels: string[] = [];
-    let multiplier = 1;
-
-    // Custom data shape matching range size requested
+    const labels: string[] = [];
+    
+    let durationMs = 3600000; // default 1 hour
+    const numPoints = 7;
+    const now = Date.now();
+    
     if (range.endsWith("min")) {
-      const minutes = parseInt(range);
-      multiplier = 5;
-      for (let i = 0; i <= 6; i++) {
-        seedPoints.push(12 + Math.floor(Math.sin(i * 1.2) * 5) + (i % 2) * 3);
-        labels.push(`${Math.round((minutes / 6) * i)}m ago`);
-      }
+      durationMs = parseInt(range) * 60000;
     } else if (range.endsWith("hour") || range.endsWith("hours")) {
-      const hr = parseInt(range);
-      multiplier = 24;
-      for (let i = 0; i <= 7; i++) {
-        seedPoints.push(45 + Math.floor(Math.cos(i * 0.9) * 18) + (i % 3) * 6);
-        labels.push(`${Math.round((hr / 7) * i)}h ago`);
-      }
+      durationMs = parseInt(range) * 3600000;
     } else if (range.endsWith("day") || range.endsWith("days")) {
-      const dy = parseInt(range);
-      multiplier = 140;
-      for (let i = 0; i <= 6; i++) {
-        seedPoints.push(180 + Math.floor(Math.sin(i * 1.5) * 60) + (i % 2) * 20);
-        labels.push(`Day ${i + 1}`);
-      }
+      durationMs = parseInt(range) * 24 * 3600000;
     } else if (range.endsWith("month") || range.endsWith("months")) {
-      const mo = parseInt(range);
-      multiplier = 1200;
-      for (let i = 0; i <= 6; i++) {
-        seedPoints.push(850 + Math.floor(Math.sin(i) * 300) + (i * 45));
-        labels.push(`M ${i + 1}`);
-      }
-    } else {
-      // Years
-      const yr = parseInt(range);
-      multiplier = 18000;
-      for (let i = 0; i <= 8; i++) {
-        seedPoints.push(9500 + Math.floor(Math.cos(i) * 2500) + (i * 1200));
-        labels.push(`Year ${Math.round((yr / 8) * i)}`);
+      durationMs = parseInt(range) * 30 * 24 * 3600000;
+    } else if (range.endsWith("year") || range.endsWith("years")) {
+      durationMs = parseInt(range) * 365 * 24 * 3600000;
+    }
+
+    const intervalStep = durationMs / (numPoints - 1);
+
+    for (let i = 0; i < numPoints; i++) {
+      const intervalEnd = now - ((numPoints - 1 - i) * intervalStep);
+      const intervalStart = intervalEnd - intervalStep;
+      
+      // Filter occurrences inside this actual timeframe
+      const count = systemLogs.filter(
+        (log) => log.timestamp >= intervalStart && log.timestamp < intervalEnd
+      ).length;
+      seedPoints.push(count);
+
+      // Generate accurate relative time label
+      const diffMs = now - intervalEnd;
+      if (range.endsWith("min")) {
+        const minAgo = Math.round(diffMs / 60000);
+        labels.push(minAgo === 0 ? "Now" : `${minAgo}m ago`);
+      } else if (range.endsWith("hour") || range.endsWith("hours")) {
+        const hrAgo = Math.round(diffMs / 3600000);
+        labels.push(hrAgo === 0 ? "Now" : `${hrAgo}h ago`);
+      } else if (range.endsWith("day") || range.endsWith("days")) {
+        const dayAgo = Math.round(diffMs / 86400000);
+        labels.push(dayAgo === 0 ? "Today" : `${dayAgo}d ago`);
+      } else if (range.endsWith("month") || range.endsWith("months")) {
+        const moAgo = Math.round(diffMs / (30 * 86400000));
+        labels.push(moAgo === 0 ? "This mo" : `${moAgo}mo ago`);
+      } else {
+        const yrAgo = Math.round(diffMs / (365 * 86400000));
+        labels.push(yrAgo === 0 ? "This yr" : `${yrAgo}y ago`);
       }
     }
 
     const max = Math.max(...seedPoints, 1);
     const sum = seedPoints.reduce((a, b) => a + b, 0);
-    const avg = Math.round(sum / seedPoints.length);
+    const avg = Math.round((sum / seedPoints.length) * 100) / 100;
 
-    // Calculate dynamic coordinates for high performance custom SVG route line
+    // Calculate dynamic coordinates for custom SVG sparks spline with total precision
     const width = 500;
     const height = 140;
     const padding = 20;
@@ -181,7 +191,6 @@ export default function AdminPanel({
     if (points.length > 0) {
       pathD = `M ${points[0].x} ${points[0].y}`;
       for (let i = 1; i < points.length; i++) {
-        // Curve approximation
         const cpX1 = points[i - 1].x + (points[i].x - points[i - 1].x) / 2;
         const cpY1 = points[i - 1].y;
         const cpX2 = points[i - 1].x + (points[i].x - points[i - 1].x) / 2;
@@ -190,59 +199,53 @@ export default function AdminPanel({
       }
     }
 
-    // Dynamic metrics aligned with screenshot: Total, Average, Max, Last
     return {
       points,
       pathD,
       labels,
       total: sum,
       avg,
-      maxVal: max,
+      maxVal: max === 1 && seedPoints.every((v) => v === 0) ? 0 : max,
       lastVal: seedPoints[seedPoints.length - 1],
     };
   };
 
   const trendData = getTimelineData(selectedRange);
 
-  // Parse custom user agent share data dynamically
+  // Compute actual device distribution purely based on genuine system logs
   const getDeviceShares = () => {
-    const baseShares = {
-      Android: 32.5,
-      iPhone: 28.4,
-      iPad: 8.2,
-      macOS: 14.1,
-      Linux: 4.8,
-      Windows: 12.0,
+    const counters: Record<string, number> = {
+      Android: 0,
+      iPhone: 0,
+      iPad: 0,
+      macOS: 0,
+      Linux: 0,
+      Windows: 0,
     };
 
-    // Blend localized visitor states from true hits registered
-    if (systemLogs.length > 0) {
-      const counters: Record<string, number> = {
-        Android: 0,
-        iPhone: 0,
-        iPad: 0,
-        macOS: 0,
-        Linux: 0,
-        Windows: 0,
-      };
-      systemLogs.forEach((log) => {
-        if (log.device && counters[log.device] !== undefined) {
-          counters[log.device]++;
-        }
-      });
-
-      const totalParsed = Object.values(counters).reduce((a, b) => a + b, 0);
-      if (totalParsed > 0) {
-        Object.keys(baseShares).forEach((key) => {
-          const rawPercent = (counters[key] / totalParsed) * 100;
-          baseShares[key as keyof typeof baseShares] = parseFloat(
-            ((baseShares[key as keyof typeof baseShares] * 2 + rawPercent) / 3).toFixed(1)
-          );
-        });
-      }
+    if (systemLogs.length === 0) {
+      return counters;
     }
 
-    return baseShares;
+    systemLogs.forEach((log) => {
+      if (log.device && counters[log.device] !== undefined) {
+        counters[log.device]++;
+      }
+    });
+
+    const totalParsed = Object.values(counters).reduce((a, b) => a + b, 0);
+    const shares: Record<string, number> = {};
+    if (totalParsed > 0) {
+      Object.keys(counters).forEach((key) => {
+        shares[key] = parseFloat(((counters[key] / totalParsed) * 100).toFixed(1));
+      });
+    } else {
+      Object.keys(counters).forEach((key) => {
+        shares[key] = 0;
+      });
+    }
+
+    return shares;
   };
 
   const deviceShare = getDeviceShares();
@@ -465,10 +468,10 @@ export default function AdminPanel({
               <Activity className="h-4 w-4 text-teal-500" />
             </div>
             <p className="text-2xl font-bold font-mono text-teal-500">
-              {Math.max(148 + systemLogs.length, 148).toLocaleString()}
+              {systemLogs.length.toLocaleString()}
             </p>
             <p className="text-[10px] text-emerald-400 font-semibold mt-1 font-sans">
-              +14% since yesterday
+              {systemLogs.length > 0 ? "Realtime log active" : "Starting telemetry..."}
             </p>
           </div>
 
@@ -484,10 +487,10 @@ export default function AdminPanel({
               <Users className="h-4 w-4 text-emerald-500" />
             </div>
             <p className="text-2xl font-bold font-mono text-emerald-500">
-              {livePeersCount}
+              {activePeersCount}
             </p>
             <p className="text-[10px] text-slate-400 mt-1 font-sans">
-              Active sockets matched
+              {activePeersCount === 0 ? "No active peers in room" : "Matching peers in room"}
             </p>
           </div>
 
@@ -503,10 +506,10 @@ export default function AdminPanel({
               <RefreshCw className="h-4 w-4 text-sky-500 animate-spin-slow" />
             </div>
             <p className="text-2xl font-bold font-mono text-sky-500">
-              {Math.max(2, Math.floor(livePeersCount / 2))}
+              {activePeersCount > 0 ? 1 : 0}
             </p>
-            <p className="text-[10px] text-slate-400 mt-1 font-sans font-mono">
-              Tunnel handshakes idle
+            <p className="text-[10px] text-slate-400 mt-1 font-sans font-sans">
+              {activePeersCount > 0 ? "Handshakes active in room" : "No active handshake room"}
             </p>
           </div>
 
@@ -522,10 +525,10 @@ export default function AdminPanel({
               <FolderSync className="h-4 w-4 text-purple-500" />
             </div>
             <p className="text-2xl font-bold font-mono text-purple-500">
-              {Math.max(48, 48 + systemLogs.length * 2)}
+              {sessionTransfersCount}
             </p>
             <p className="text-[10px] text-emerald-400 font-semibold mt-1 font-sans">
-              100% direct WebRTC
+              {sessionTransfersCount > 0 ? "Data transfers indexed" : "No files routed yet"}
             </p>
           </div>
 
@@ -541,10 +544,16 @@ export default function AdminPanel({
               <HardDrive className="h-4 w-4 text-teal-400" />
             </div>
             <p className="text-2xl font-bold font-mono text-teal-400">
-              {(12.4 + (systemLogs.length * 150) / 1024).toFixed(2)} GB
+              {(() => {
+                if (sessionTransfersVolume === 0) return "0 Bytes";
+                const k = 1024;
+                const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+                const i = Math.floor(Math.log(sessionTransfersVolume) / Math.log(k));
+                return parseFloat((sessionTransfersVolume / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+              })()}
             </p>
             <p className="text-[10px] text-teal-400 font-semibold mt-1 font-sans">
-              Zero server disk allocated
+              {sessionTransfersVolume > 0 ? "E2E direct data payload" : "0 bytes streamed yet"}
             </p>
           </div>
         </div>
@@ -825,7 +834,7 @@ export default function AdminPanel({
                     Waiting for users to connect to PIMXNODE directories...
                   </p>
                   <span className="text-[9px] font-mono text-slate-600">
-                    Live WebSockets matched: {livePeersCount} idle
+                    Live WebSockets matched: {activePeersCount} idle
                   </span>
                 </div>
               ) : (
