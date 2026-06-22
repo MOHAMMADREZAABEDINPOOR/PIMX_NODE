@@ -108,15 +108,34 @@ export default function AdminPanel({
     localStorage.removeItem("pimx_admin_auth");
   };
 
-  // Load live user connections and historic visits
+  // Load real visits from Cloudflare KV via Pages Function API
   useEffect(() => {
-    const visitsStr = localStorage.getItem("pimx_visits") || "[]";
-    try {
-      const parsed = JSON.parse(visitsStr);
-      setSystemLogs(parsed);
-    } catch (e) {
-      setSystemLogs([]);
-    }
+    if (!isAuthenticated) return;
+
+    const fetchVisits = async () => {
+      try {
+        const res = await fetch("/api/get-visits?limit=500");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.ok && Array.isArray(data.visits)) {
+            setSystemLogs(data.visits);
+          }
+        }
+      } catch (_) {
+        // Fallback: try localStorage for local dev
+        try {
+          const parsed = JSON.parse(localStorage.getItem("pimx_visits") || "[]");
+          setSystemLogs(parsed);
+        } catch (__) {
+          setSystemLogs([]);
+        }
+      }
+    };
+
+    fetchVisits();
+    // Auto-refresh every 30 seconds while panel is open
+    const interval = setInterval(fetchVisits, 30000);
+    return () => clearInterval(interval);
   }, [isAuthenticated]);
 
   // Genuine aggregator to construct live timeline charts based strictly on timestamps of actual visitor logs
@@ -853,15 +872,22 @@ export default function AdminPanel({
                           </div>
                           <div>
                             <p className="text-xs font-bold text-white">
-                              {log.peerName || "Anonymous User"}
+                              {log.peerName || "Anonymous Visitor"}
                             </p>
-                            <span className="text-[10px] font-mono text-slate-500 flex items-center gap-1">
-                              Room: <b className="text-cyan-400">{log.roomId}</b> | OS: {log.device}
+                            <span className="text-[10px] font-mono text-slate-500 flex flex-wrap items-center gap-1">
+                              {log.device && <span className="text-teal-400">{log.device}</span>}
+                              {log.browser && <span className="text-purple-400">{log.browser}</span>}
+                              {log.country && log.country !== "XX" && (
+                                <span className="text-amber-400">{log.city ? `${log.city}, ` : ""}{log.country}</span>
+                              )}
+                              {log.ip && log.ip !== "unknown" && (
+                                <span className="text-slate-600">{log.ip}</span>
+                              )}
                             </span>
                           </div>
                         </div>
 
-                        <div className="text-right text-[9px] font-mono text-slate-400">
+                        <div className="text-right text-[9px] font-mono text-slate-400 shrink-0">
                           {new Date(log.timestamp).toLocaleTimeString([], {
                             hour: "2-digit",
                             minute: "2-digit",

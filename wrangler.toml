@@ -1,0 +1,18 @@
+# Cloudflare Pages + Workers configuration for PIMXNODE
+# https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+
+name = "pimxnode"
+compatibility_date = "2024-09-23"
+pages_build_output_dir = "dist"
+
+# KV Namespace binding for visitor analytics
+# Steps to set up:
+#  1. Go to: Cloudflare Dashboard → Workers & Pages → KV → Create a namespace
+#  2. Name it "PIMX_VISITS" (or any name you prefer)
+#  3. Copy the KV namespace ID shown after creation
+#  4. Paste the ID below in "id"
+#  5. (Optional) For local dev with wrangler: also fill in "preview_id"
+[[kv_namespaces]]
+binding = "PIMX_VISITS"
+id = "0b85e62c84584bcdb98dd846c801af61"
+# preview_id = "REPLACE_WITH_YOUR_PREVIEW_KV_ID"  # for local `wrangler pages dev`

@@ -381,50 +381,24 @@ export default function App() {
     // Initial check
     checkAdmin();
 
-    // Log the current visitor for the admin panel stats
+    // Track real visit via Cloudflare Pages Function (server-side IP/geo detection)
     const isANow = window.location.pathname === "/pimxnodeadmin" || window.location.hash === "#/pimxnodeadmin";
     if (!isANow) {
       try {
-        const stored = localStorage.getItem("pimx_visits");
-        let visits = [];
-        if (stored) {
-          try {
-            const parsed = JSON.parse(stored);
-            // Clear mock files by checking for mock peer names to ensure 105% real data starting now
-            const holdsMock = parsed.some((p: any) => ["Raptor PC", "iPhone-15", "Corporate MAC", "Samsung-S24", "Linux-Server", "Home Desktop", "John-iPad", "Work Station"].includes(p.peerName));
-            if (!holdsMock) {
-              visits = parsed;
-            }
-          } catch (e) {
-            visits = [];
-          }
-        }
-
-        // Add current hit log
-        const ua = navigator.userAgent;
-        let device = "Windows";
-        if (/android/i.test(ua)) device = "Android";
-        else if (/iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream) {
-          if (/iPad/.test(ua)) device = "iPad";
-          else device = "iPhone";
-        } else if (/Macintosh|Mac OS X/.test(ua)) device = "macOS";
-        else if (/Linux/.test(ua)) device = "Linux";
-
-        visits.push({
-          timestamp: Date.now(),
-          device: device,
-          roomId: roomId,
-          peerName: peerName
+        fetch("/api/track-visit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            peerName: peerName,
+            roomId: roomId,
+            referrer: document.referrer || "",
+            path: window.location.pathname,
+          }),
+        }).catch(() => {
+          // Silently ignore if not on Cloudflare (local dev)
         });
-
-        // Cap at 300 items to preserve localstorage constraints under heavy test actions
-        if (visits.length > 300) {
-          visits = visits.slice(visits.length - 300);
-        }
-
-        localStorage.setItem("pimx_visits", JSON.stringify(visits));
       } catch (e) {
-        console.error("Telemetry loading issue:", e);
+        // No-op: telemetry is non-critical
       }
     }
 
