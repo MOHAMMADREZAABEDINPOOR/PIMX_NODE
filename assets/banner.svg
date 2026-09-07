@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="ndBg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020d18" /><stop offset="50%" stop-color="#071a33" /><stop offset="100%" stop-color="#01060e" /></linearGradient>
+    <linearGradient id="ndNeon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"><animate attributeName="stop-color" values="#38bdf8;#818cf8;#10b981;#38bdf8" dur="7s" repeatCount="indefinite" /></stop>
+      <stop offset="50%" stop-color="#818cf8"><animate attributeName="stop-color" values="#818cf8;#ec4899;#38bdf8;#818cf8" dur="7s" repeatCount="indefinite" /></stop>
+      <stop offset="100%" stop-color="#10b981"><animate attributeName="stop-color" values="#10b981;#38bdf8;#818cf8;#10b981" dur="7s" repeatCount="indefinite" /></stop>
+    </linearGradient>
+    <linearGradient id="ndGrid" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#38bdf8" stop-opacity="0" /><stop offset="100%" stop-color="#818cf8" stop-opacity="0.35" /></linearGradient>
+    <filter id="ndGlow"><feGaussianBlur stdDeviation="5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+  </defs>
+
+  <style>
+    @keyframes ndFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+    .floating-mesh { animation: ndFloat 5.6s ease-in-out infinite; }
+  </style>
+
+  <rect width="1200" height="360" fill="url(#ndBg)" />
+
+  <g opacity="0.65">
+    <line x1="0" y1="260" x2="1200" y2="260" stroke="#38bdf8" stroke-opacity="0.25" stroke-width="1" />
+    <line x1="600" y1="260" x2="0" y2="360" stroke="url(#ndGrid)" stroke-width="1.5" />
+    <line x1="600" y1="260" x2="200" y2="360" stroke="url(#ndGrid)" stroke-width="1.5" />
+    <line x1="600" y1="260" x2="400" y2="360" stroke="url(#ndGrid)" stroke-width="1.5" />
+    <line x1="600" y1="260" x2="600" y2="360" stroke="url(#ndGrid)" stroke-width="1.5" />
+    <line x1="600" y1="260" x2="800" y2="360" stroke="url(#ndGrid)" stroke-width="1.5" />
+    <line x1="600" y1="260" x2="1000" y2="360" stroke="url(#ndGrid)" stroke-width="1.5" />
+    <line x1="600" y1="260" x2="1200" y2="360" stroke="url(#ndGrid)" stroke-width="1.5" />
+    <line x1="0" y1="290" x2="1200" y2="290" stroke="#38bdf8" stroke-opacity="0.2" stroke-width="1" />
+    <line x1="0" y1="330" x2="1200" y2="330" stroke="#818cf8" stroke-opacity="0.3" stroke-width="1.5" />
+  </g>
+
+  <circle cx="200" cy="110" r="140" fill="#38bdf8" opacity="0.08" filter="url(#ndGlow)" />
+  <circle cx="960" cy="170" r="160" fill="#818cf8" opacity="0.12" filter="url(#ndGlow)" />
+
+  <!-- 3D Interconnected Edge Mesh Cluster -->
+  <g transform="translate(940, 180)" class="floating-mesh">
+    <circle cx="0" cy="0" r="110" fill="none" stroke="url(#ndNeon)" stroke-width="2" stroke-dasharray="8 6" opacity="0.75">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="22s" repeatCount="indefinite" />
+    </circle>
+    <!-- Interconnecting Mesh Lines -->
+    <line x1="-50" y1="-30" x2="0" y2="-60" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3 3" />
+    <line x1="0" y1="-60" x2="50" y2="-30" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="3 3" />
+    <line x1="50" y1="-30" x2="40" y2="40" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3 3" />
+    <line x1="40" y1="40" x2="-40" y2="40" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3 3" />
+    <line x1="-40" y1="40" x2="-50" y2="-30" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="3 3" />
+    <line x1="0" y1="0" x2="-50" y2="-30" stroke="#38bdf8" stroke-width="1.5" />
+    <line x1="0" y1="0" x2="50" y2="-30" stroke="#818cf8" stroke-width="1.5" />
+    <line x1="0" y1="0" x2="40" y2="40" stroke="#10b981" stroke-width="1.5" />
+    <line x1="0" y1="0" x2="-40" y2="40" stroke="#38bdf8" stroke-width="1.5" />
+    <line x1="0" y1="0" x2="0" y2="-60" stroke="#818cf8" stroke-width="1.5" />
+
+    <!-- Node Spheres -->
+    <circle cx="0" cy="0" r="14" fill="#38bdf8" filter="url(#ndGlow)">
+      <animate attributeName="r" values="12;16;12" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="fill" values="#38bdf8;#818cf8;#10b981;#38bdf8" dur="7s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="-50" cy="-30" r="8" fill="#818cf8" />
+    <circle cx="0" cy="-60" r="8" fill="#10b981" />
+    <circle cx="50" cy="-30" r="8" fill="#38bdf8" />
+    <circle cx="40" cy="40" r="8" fill="#818cf8" />
+    <circle cx="-40" cy="40" r="8" fill="#10b981" />
+
+    <!-- Floating Badges -->
+    <g transform="translate(-120, -50)">
+      <rect x="0" y="0" width="85" height="22" rx="6" fill="#06162a" stroke="#38bdf8" stroke-width="1" />
+      <text x="42" y="15" font-family="'Fira Code', monospace" font-size="10" font-weight="bold" fill="#38bdf8" text-anchor="middle">EDGE MESH</text>
+    </g>
+    <g transform="translate(65, 30)">
+      <rect x="0" y="0" width="85" height="22" rx="6" fill="#06162a" stroke="#818cf8" stroke-width="1" />
+      <text x="42" y="15" font-family="'Fira Code', monospace" font-size="10" font-weight="bold" fill="#a5b4fc" text-anchor="middle">TOKEN BUCKET</text>
+    </g>
+    <g transform="translate(-40, 70)">
+      <rect x="0" y="0" width="85" height="22" rx="6" fill="#06162a" stroke="#10b981" stroke-width="1" />
+      <text x="42" y="15" font-family="'Fira Code', monospace" font-size="10" font-weight="bold" fill="#34d399" text-anchor="middle">CF WORKERS</text>
+    </g>
+  </g>
+
+  <!-- Left Typography -->
+  <g transform="translate(80, 140)">
+    <g transform="translate(0, -35)">
+      <rect x="0" y="-14" width="280" height="24" rx="12" fill="#38bdf8" fill-opacity="0.12" stroke="#38bdf8" stroke-width="1" />
+      <circle cx="12" cy="-2" r="4" fill="#38bdf8" />
+      <text x="26" y="2" font-family="'Segoe UI', sans-serif" font-size="11" font-weight="800" fill="#38bdf8" letter-spacing="2">EDGE COMPUTING // NODE DAEMON</text>
+    </g>
+
+    <text x="0" y="32" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, 'Montserrat', sans-serif" font-size="52" font-weight="900" fill="url(#ndNeon)" filter="url(#ndGlow)" letter-spacing="3">
+      PIMX_NODE
+    </text>
+
+    <text x="0" y="68" font-family="'Fira Code', monospace" font-size="16" font-weight="600" fill="#e2e8f0" letter-spacing="1">
+      ⚡ Distributed Edge Node Management Daemon for Cloudflare Workers
+    </text>
+
+    <g transform="translate(0, 92)">
+      <rect x="0" y="0" width="165" height="26" rx="6" fill="#071830" stroke="#38bdf8" stroke-width="1" />
+      <text x="82" y="17" font-family="'Fira Code', monospace" font-size="11" font-weight="bold" fill="#38bdf8" text-anchor="middle">🌐 Distributed Mesh</text>
+
+      <rect x="175" y="0" width="160" height="26" rx="6" fill="#071830" stroke="#818cf8" stroke-width="1" />
+      <text x="255" y="17" font-family="'Fira Code', monospace" font-size="11" font-weight="bold" fill="#a5b4fc" text-anchor="middle">⚡ Token Bucket Limit</text>
+
+      <rect x="345" y="0" width="150" height="26" rx="6" fill="#071830" stroke="#10b981" stroke-width="1" />
+      <text x="420" y="17" font-family="'Fira Code', monospace" font-size="11" font-weight="bold" fill="#34d399" text-anchor="middle">❤️ Health Checks</text>
+
+      <rect x="505" y="0" width="150" height="26" rx="6" fill="#071830" stroke="#ec4899" stroke-width="1" />
+      <text x="580" y="17" font-family="'Fira Code', monospace" font-size="11" font-weight="bold" fill="#f472b6" text-anchor="middle">🚀 Vite Bundled</text>
+    </g>
+  </g>
+
+  <line x1="0" y1="358" x2="1200" y2="358" stroke="url(#ndNeon)" stroke-width="3" filter="url(#ndGlow)" />
+</svg>

@@ -12,7 +12,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Cloudflare Workers](https://img.shields.io/badge/Edge-Cloudflare_Workers-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://workers.cloudflare.com/)
 [![Node.js](https://img.shields.io/badge/Runtime-Node.js_v20+-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Read in Persian](https://img.shields.io/badge/مطالعه_به_فارسی-Persian_README-008080?style=for-the-badge)](#-بخش-فوقالعاده-مفصل-و-جامع-به-زبان-فارسی-persian-documentation)
+[![Read in Persian](https://img.shields.io/badge/مطالعه_به_فارسی-Persian_README-008080?style=for-the-badge)](#persian-documentation)
 
 <p align="center">
   <b>PIMX_NODE</b> is a distributed edge daemon and high-performance infrastructure orchestrator engineered for the PIMX technology ecosystem. Operating inside Cloudflare Workers V8 isolates and standalone Node.js runtimes, PIMX_NODE monitors upstream proxy health, enforces cryptographic rate-limiting, and balances traffic across global network nodes.
@@ -22,7 +22,7 @@
 [Directory Anatomy](#-exhaustive-directory--file-anatomy) •
 [Daemon Architecture](#-daemon-mechanics--rate-limiting) •
 [Quick Start](#-quick-start) •
-[توضیحات فارسی](#-بخش-فوقالعاده-مفصل-و-جامع-به-زبان-فارسی-persian-documentation) •
+[توضیحات فارسی](#persian-documentation) •
 [License](#-copyleft-license--legal-attribution)
 
 </div>
@@ -81,7 +81,8 @@ npx wrangler deploy
 
 ---
 
-## 🇮🇷 بخش فوق‌العاده مفصل و جامع به زبان فارسی (Persian Documentation)
+## Persian Documentation
+### 🇮🇷 مستندات فوق‌العاده مفصل، جامع و فنی به زبان فارسی
 
 ### ۱. معرفی دیمن زیرساختی PIMX_NODE
 پروژه **PIMX_NODE** ستون فقرات ارتباطی و پایش شبکه در اکوسیستم PIMX است. این سرویس به عنوان یک ناظر هوشمند (Orchestrator) در لبه شبکه کلودفلر و محیط Node.js فعالیت می‌کند تا از سلامت همیشگی سرورهای پروکسی، توزیع متوازن بار ترافیک و ممانعت از ارسال درخواست‌های مخرب با الگوریتم Token Bucket اطمینان حاصل کند.
@@ -102,6 +103,6 @@ Distributed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.
 ---
 
 <div align="center">
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=1,12,24,30&height=120&section=footer" alt="Footer" width="100%" />
+<img src="./assets/footer.svg" alt="PIMX_NODE 3D Footer" width="100%" />
 <sub>Architected by <a href="https://github.com/MOHAMMADREZAABEDINPOOR"><b>MOHAMMADREZA ABEDINPOOR</b></a>. Leave a ⭐ to support open edge networking!</sub>
 </div>
