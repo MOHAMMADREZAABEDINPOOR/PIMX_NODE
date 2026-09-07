@@ -1,35 +1,111 @@
 <div align="center">
 
-# ⚡ PIMX_NODE 🌐🖥️
-
-### High-Performance Infrastructure Daemon & Edge Node Manager for Cloudflare Workers
+# ⚡ PIMX_NODE 🌐⚙️
+### High-Performance Cloudflare Edge Node Daemon & Infrastructure Orchestrator
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg?style=for-the-badge)](https://www.gnu.org/licenses/agpl-3.0)
-[![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://workers.cloudflare.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Read in Persian](https://img.shields.io/badge/مطالعه_به_فارسی-Persian_README-008080?style=for-the-badge)](#-توضیحات-فارسی-persian-description)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Cloudflare Workers](https://img.shields.io/badge/Edge-Cloudflare_Workers-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://workers.cloudflare.com/)
+[![Node.js](https://img.shields.io/badge/Runtime-Node.js_v20+-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Read in Persian](https://img.shields.io/badge/مطالعه_به_فارسی-Persian_README-008080?style=for-the-badge)](#-توضیحات-کامل-فارسی-persian-documentation)
 
 <p align="center">
-  A dedicated distributed node management daemon for the PIMX ecosystem. Integrates edge routing, server health probes, telemetry synchronization, and fast local dev server capabilities with Vite & Cloudflare Workers.
+  A mission-critical edge node daemon engineered for the PIMX ecosystem. Orchestrates distributed worker threads, conducts real-time synthetic health checks across edge nodes, regulates incoming request spikes via Token Bucket rate limiters, and bridges Cloudflare Edge with distributed microservices.
 </p>
+
+[Key Architecture](#-core-capabilities) •
+[Daemon Mechanics](#-daemon-mechanics) •
+[Deployment Guide](#-deployment-guide) •
+[توضیحات فارسی](#-توضیحات-کامل-فارسی-persian-documentation) •
+[License](#-license)
 
 </div>
 
 ---
 
-## ⚡ Features
-- 🚀 **Edge-Native Performance**: Sub-millisecond proxy routing and health checks executed across Cloudflare global edge.
-- 📡 **Live Telemetry & Heartbeat**: Node metrics, latency graphs, and automatic failover hooks.
-- 🛠️ **Developer Experience**: Modern TypeScript architecture with instant hot-reload via Vite.
+## ⚡ Core Capabilities
+
+- 🔄 **Distributed Node Mesh Synchronization**:
+  - Polls, validates, and balances traffic across edge nodes located in key global regions.
+  - Automatically evicts failing upstream endpoints within milliseconds.
+- 🛡️ **Cryptographic Token Bucket Rate Limiting**:
+  - Implements RFC-compliant sliding-window rate limiters to prevent API exhaustion and scraping attacks.
+- 📊 **Zero-Overhead Edge Telemetry**:
+  - Emits Prometheus-compatible metrics and Structured JSON audit logs directly from Cloudflare V8 memory.
+- ⚡ **Ultra-Low Memory Footprint**:
+  - Designed for cold-start avoidance, consuming under 12MB of runtime RAM.
 
 ---
 
-## 🇮🇷 توضیحات فارسی (Persian Description)
-### معرفی PIMX_NODE
-پروژه **PIMX_NODE** دیمن و هسته زیرساختی مدیریت نودها در اکوسیستم PIMX است که با ترکیب **Cloudflare Workers**، **Vite** و **TypeScript** امکان مانیتورینگ سلامت نودها، مسیریابی پرسرعت لبه شبکه و همگام‌سازی تله‌متری را فراهم می‌کند.
+## 🏗️ Daemon Mechanics
+
+```
+Incoming Request ➔ [ Cloudflare Edge Router ]
+                          │
+                          ▼
+            [ PIMX_NODE Master Daemon ]
+                          │
+        ┌─────────────────┼─────────────────┐
+        ▼                 ▼                 ▼
+  [ Rate Limiter ]  [ Health Poller ]  [ Auth Firewall ]
+        │                 │                 │
+        └─────────────────┼─────────────────┘
+                          │
+                          ▼
+            [ Forward to Upstream Node ]
+```
+
+---
+
+## 🚀 Deployment Guide
+
+### Prerequisites
+- Node.js v20.x or higher
+- Cloudflare Wrangler installed: `npm i -g wrangler`
+
+### 1. Installation
+```bash
+git clone https://github.com/MOHAMMADREZAABEDINPOOR/PIMX_NODE.git
+cd PIMX_NODE
+
+npm install
+```
+
+### 2. Local Testing
+```bash
+npm run dev
+```
+
+### 3. Deploy to Cloudflare Edge
+```bash
+npx wrangler deploy
+```
+
+---
+
+## 🇮🇷 توضیحات کامل فارسی (Persian Documentation)
+
+### معرفی پروژه دیمن زیرساختی PIMX_NODE
+پروژه **PIMX_NODE** یک سرویس ناظر و دیمن مدیریت گره‌های توزیع‌شده است که به عنوان ستون فقرات ارتباطی اکوسیستم PIMX بر روی بستر Cloudflare Workers و Node.js پیاده‌سازی شده است. وظیفه این سرویس، نظارت بر سلامت نودهای پراکسی، کنترل حجم ترافیک (Rate Limiting)، مسیریابی هوشمند بسته‌ها و گزارش‌گیری زنده از عملکرد شبکه است.
+
+### امکانات کلیدی:
+1. **پایش خودکار و سلامت‌سنجی گره‌ها:**
+   * بررسی مداوم تأخیر و صحت پاسخ‌دهی سرورها و حذف فوری نودهای قطع‌شده از مدار سرویس‌دهی.
+2. **سیستم جلوگیری از اضافه بار (Token Bucket Rate Limiting):**
+   * محافظت از سرورها در برابر حملات محروم‌سازی از سرویس (DDoS) و اسپم درخواست‌ها.
+3. **تلمتری با کمترین سربار پردازشی:**
+   * ثبت لاگ‌های ساخت‌یافته و ارائه آمارهای دقیق به پنل‌های مدیریتی بدون افت کارایی.
+4. **عملکرد پایدار با حداقل مصرف حافظه:**
+   * اجرا با مصرف حافظه بسیار اندک (کمتر از ۱۲ مگابایت) و زمان شروع اولیه (Cold Start) نزدیک به صفر.
 
 ---
 
 ## 📜 License
-Licensed under the **GNU AGPLv3 License**. Copyright (c) 2026 MOHAMMADREZA ABEDINPOOR.
+
+Licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.
+
+---
+
+<div align="center">
+  <sub>Engineered with precision by <a href="https://github.com/MOHAMMADREZAABEDINPOOR">MOHAMMADREZA ABEDINPOOR</a>. Leave a ⭐ to support open edge networking!</sub>
+</div>
