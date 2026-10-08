@@ -8,6 +8,12 @@
 
 # 🔗 PIMX NODE
 
+<!-- pimx-live-site:start -->
+## Live website
+
+**[Open PIMX_NODE ↗](https://pimxnode.pages.dev/)**
+<!-- pimx-live-site:end -->
+
 A browser file-transfer workspace built around WebRTC data channels, a Node.js WebSocket signaling service and AES-GCM encryption of transferred chunks.
 
 [GitHub](https://github.com/MOHAMMADREZAABEDINPOOR/PIMX_NODE) · [PIMX / Profile](https://github.com/MOHAMMADREZAABEDINPOOR) · [Static artwork](assets/readme/hero.png)
