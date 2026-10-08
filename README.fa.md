@@ -10,6 +10,12 @@
 
 # 🔗 PIMX NODE
 
+<!-- pimx-live-site:start -->
+## وب‌سایت آنلاین
+
+**[مشاهدهٔ PIMX_NODE ↗](https://pimxnode.pages.dev/)**
+<!-- pimx-live-site:end -->
+
 محیط انتقال فایل در مرورگر با کانال داده WebRTC، سرویس سیگنالینگ WebSocket در Node.js و رمزنگاری AES-GCM برای قطعه‌های فایل.
 
 [GitHub](https://github.com/MOHAMMADREZAABEDINPOOR/PIMX_NODE) · [PIMX / Profile](https://github.com/MOHAMMADREZAABEDINPOOR) · [بنر ثابت](assets/readme/hero.png)
