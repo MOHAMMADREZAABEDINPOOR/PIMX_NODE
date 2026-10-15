@@ -94,22 +94,22 @@ export default function CoolLoading({
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, y: -20, transition: { duration: 0.45, ease: "easeInOut" } }}
       className={`fixed inset-0 z-50 flex flex-col justify-between overflow-hidden transition-colors duration-300 ${
-        theme === "dark" 
-          ? "bg-[#070b13] text-[#f1f5f9]" 
-          : "bg-[#f8fafc] text-slate-800"
+        theme === "dark"
+          ? "bg-[#110911] text-[#f8f2f8]"
+          : "bg-[#fbf9fb] text-slate-800"
       }`}
     >
       {/* High-tech tech ambient glow and grid backgrounds */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {theme === "dark" ? (
           <>
-            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-teal-500/[0.04] rounded-full blur-[120px]" />
-            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-sky-500/[0.04] rounded-full blur-[120px]" />
+            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-pink-500/[0.04] rounded-full blur-[120px]" />
+            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/[0.04] rounded-full blur-[120px]" />
           </>
         ) : (
           <>
-            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-teal-400/[0.03] rounded-full blur-[120px]" />
-            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-sky-400/[0.03] rounded-full blur-[120px]" />
+            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-pink-400/[0.03] rounded-full blur-[120px]" />
+            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-400/[0.03] rounded-full blur-[120px]" />
           </>
         )}
       </div>
@@ -117,11 +117,11 @@ export default function CoolLoading({
       {/* Top Header Controls bar */}
       <header className="relative w-full max-w-7xl mx-auto px-4 py-2 sm:px-6 sm:py-4 flex items-center justify-between border-b shrink-0 transition-colors duration-300 border-transparent">
         <div className="flex items-center gap-2 font-mono text-[10px] sm:text-xs">
-          <Terminal className={`h-3.5 w-3.5 ${theme === "dark" ? "text-teal-400 animate-pulse" : "text-teal-600"}`} />
+          <Terminal className={`h-3.5 w-3.5 ${theme === "dark" ? "text-pink-400 animate-pulse" : "text-pink-600"}`} />
           <span className={theme === "dark" ? "text-slate-400" : "text-slate-600"}>
             SECURE_SHELL //
           </span>
-          <span className="font-bold text-teal-600 dark:text-teal-400">
+          <span className="font-bold text-pink-600 dark:text-pink-400">
             {progress < 100 ? "INITIALIZING" : "PORTAL_READY"}
           </span>
         </div>
@@ -133,8 +133,8 @@ export default function CoolLoading({
             onClick={() => setLang(lang === "fa" ? "en" : "fa")}
             className={`p-1.5 sm:p-2 rounded-xl border text-[10px] sm:text-xs font-bold transition-all flex items-center gap-1 cursor-pointer hover:scale-105 duration-200 ${
               theme === "dark"
-                ? "bg-slate-900 border-slate-800 text-teal-400 hover:text-teal-300 hover:bg-slate-800"
-                : "bg-white border-slate-200 text-teal-600 hover:text-teal-700 hover:bg-slate-50 shadow-sm"
+                ? "bg-slate-900 border-slate-800 text-pink-400 hover:text-pink-300 hover:bg-slate-800"
+                : "bg-white border-slate-200 text-pink-600 hover:text-pink-700 hover:bg-slate-50 shadow-sm"
             }`}
             title="Toggle Language / تغییر زبان"
           >
@@ -162,12 +162,12 @@ export default function CoolLoading({
       {/* Main Holographic / Cyber Scanner Screen */}
       <main className="relative flex-1 flex flex-col justify-center items-center py-2 sm:py-6 px-4 overflow-hidden">
         <div className="w-full max-w-sm sm:max-w-md md:max-w-lg flex flex-col items-center">
-          
+
           {/* Cyber Holographic Vector Wheel */}
           <div className="relative w-28 h-28 sm:w-40 sm:h-40 mb-3 sm:mb-6 flex justify-center items-center shrink-0">
             {/* Ambient shadow back glow */}
             <div className={`absolute inset-2 sm:inset-4 rounded-full blur-xl sm:blur-2xl transition-colors duration-300 ${
-              theme === "dark" ? "bg-teal-500/20" : "bg-teal-400/10"
+              theme === "dark" ? "bg-pink-500/20" : "bg-pink-400/10"
             }`} />
 
             {/* Glowing Orbit Rings */}
@@ -178,7 +178,7 @@ export default function CoolLoading({
                 cy="50"
                 r="44"
                 fill="none"
-                stroke={theme === "dark" ? "rgba(20, 184, 166, 0.4)" : "rgba(13, 148, 136, 0.25)"}
+                stroke={theme === "dark" ? "rgba(250, 22, 110, 0.4)" : "rgba(166, 5, 51, 0.25)"}
                 strokeWidth="1.5"
                 strokeDasharray="25 15 5 15"
               />
@@ -199,27 +199,27 @@ export default function CoolLoading({
 
             {/* Tiny rotating satellite indicator node dots */}
             <svg className="absolute inset-3 w-[calc(100%-24px)] h-[calc(100%-24px)] animate-radar-sweep" viewBox="0 0 100 100">
-              <circle cx="50" cy="10" r="2.5" fill="#14b8a6" />
-              <circle cx="10" cy="50" r="1.5" fill="#06b6d4" />
+              <circle cx="50" cy="10" r="2.5" fill="#fa166e" />
+              <circle cx="10" cy="50" r="1.5" fill="#8b50d0" />
             </svg>
 
             {/* Central Secure Emblem Wrapper */}
             <div className={`w-18 h-18 sm:w-24 sm:h-24 rounded-full border flex flex-col justify-center items-center relative transition-colors duration-300 ${
               theme === "dark"
-                ? "bg-[#0b1324] border-teal-500/35 shadow-[0_0_20px_rgba(20,184,166,0.15)]"
-                : "bg-white border-teal-200 shadow-md"
+                ? "bg-[#1e101f] border-pink-500/35 shadow-[0_0_20px_rgba(250,22,110,0.15)]"
+                : "bg-white border-pink-200 shadow-md"
             }`}>
               {/* Dynamic shield status based on boots */}
               {progress < 100 ? (
                 <Shield className={`h-8 w-8 sm:h-10 sm:w-10 transition-all ${
-                  theme === "dark" ? "text-teal-400 animate-pulse" : "text-teal-600"
+                  theme === "dark" ? "text-pink-400 animate-pulse" : "text-pink-600"
                 }`} />
               ) : (
                 <Lock className={`h-8 w-8 sm:h-10 sm:w-10 transition-all ${
-                  theme === "dark" ? "text-emerald-400" : "text-emerald-600"
+                  theme === "dark" ? "text-fuchsia-400" : "text-fuchsia-600"
                 }`} />
               )}
-              
+
               <span className={`text-[9px] sm:text-[10px] font-mono mt-0.5 tracking-widest ${
                 theme === "dark" ? "text-slate-400" : "text-slate-500"
               }`}>
@@ -236,8 +236,8 @@ export default function CoolLoading({
             <p className={`text-[10px] sm:text-xs font-mono max-w-sm mx-auto leading-relaxed ${
               theme === "dark" ? "text-slate-400" : "text-slate-650 font-semibold"
             }`}>
-              {lang === "fa" 
-                ? "سامانه تبادل داده بدون سرور کلاینت به کلاینت" 
+              {lang === "fa"
+                ? "سامانه تبادل داده بدون سرور کلاینت به کلاینت"
                 : "SERVERLESS CLIENT-TO-CLIENT END-TO-END CRYPTOGRAPHY"}
             </p>
           </div>
@@ -245,25 +245,25 @@ export default function CoolLoading({
           {/* Premium Tech Progress bar lines */}
           <div className="w-full mt-3 sm:mt-5 space-y-1 shrink-0">
             <div className={`h-2 sm:h-2.5 w-full rounded-full border p-0.5 relative overflow-hidden flex items-center transition-colors duration-300 ${
-              theme === "dark" ? "bg-slate-950/80 border-slate-800" : "bg-[#f1f5f9] border-slate-200"
+              theme === "dark" ? "bg-slate-950/80 border-slate-800" : "bg-[#f8f2f8] border-slate-200"
             }`}>
               <div
-                className="h-full rounded-full bg-gradient-to-r from-teal-500 via-cyan-400 to-emerald-500 transition-all duration-150 relative"
+                className="h-full rounded-full bg-gradient-to-r from-pink-500 via-purple-400 to-fuchsia-500 transition-all duration-150 relative"
                 style={{ width: `${progress}%` }}
               >
                 {/* Scanner pulse head dot */}
                 <div className="absolute right-0 top-0 bottom-0 w-2.5 bg-white blur-[1.5px] rounded-full animate-pulse" />
               </div>
             </div>
-            
+
             <div className="flex justify-between items-center font-mono text-[8px] sm:text-[9px] text-slate-500">
               <span className="flex items-center gap-0.5">
                 <Globe className="h-2.5 w-2.5 animate-spin-slow" />
                 STUN: STUN.L.GOOGLE.COM:19302
               </span>
               <span>
-                {progress === 100 
-                  ? (lang === "fa" ? "محیط امن آماده شد" : "SESSION_READY") 
+                {progress === 100
+                  ? (lang === "fa" ? "محیط امن آماده شد" : "SESSION_READY")
                   : `${progress * 2.5} KB/s`}
               </span>
             </div>
@@ -271,9 +271,9 @@ export default function CoolLoading({
 
           {/* Interactive Scrolling Terminal logs */}
           <div className={`mt-3 sm:mt-5 w-full rounded-xl border p-2.5 sm:p-3.5 font-mono text-[9px] sm:text-[10px] md:text-[11px] leading-relaxed relative ${
-            theme === "dark" 
-              ? "bg-[#040810]/95 border-slate-850/80 text-teal-400/90 shadow-2xl" 
-              : "bg-slate-100 border-slate-300/80 text-teal-800 shadow-sm"
+            theme === "dark"
+              ? "bg-[#0d070d]/95 border-slate-850/80 text-pink-400/90 shadow-2xl"
+              : "bg-slate-100 border-slate-300/80 text-pink-800 shadow-sm"
           }`}>
             {/* Background absolute subtle indicator logs */}
             <div className={`absolute top-1 right-2 font-bold text-[7px] tracking-wider ${
@@ -296,10 +296,10 @@ export default function CoolLoading({
                     }`}
                   >
                     {isConfigured ? (
-                      <CheckCircle2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                      <CheckCircle2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-fuchsia-500 shrink-0 mt-0.5" />
                     ) : isActive ? (
                       <div className="h-3 w-3 sm:h-3.5 sm:w-3.5 flex items-center justify-center shrink-0 mt-0.5">
-                        <div className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-teal-500 animate-ping" />
+                        <div className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-pink-500 animate-ping" />
                       </div>
                     ) : (
                       <div className={`h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-dashed shrink-0 mt-0.5 ${
@@ -309,10 +309,10 @@ export default function CoolLoading({
 
                     <div className="flex-1 min-w-0">
                       <span className={`text-[8px] sm:text-[9px] font-bold px-1 py-0.5 rounded mr-1 select-none font-mono tracking-wider ${
-                        isConfigured 
-                          ? "bg-emerald-500/10 text-emerald-500" 
-                          : isActive 
-                            ? "bg-teal-500/10 text-teal-400 animate-pulse" 
+                        isConfigured
+                          ? "bg-fuchsia-500/10 text-fuchsia-500"
+                          : isActive
+                            ? "bg-pink-500/10 text-pink-400 animate-pulse"
                             : "bg-slate-550/10 text-slate-500"
                       }`}>
                         {step.tag}

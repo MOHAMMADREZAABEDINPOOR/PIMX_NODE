@@ -1,0 +1,111 @@
+/* Palette #240 is shared by every route, control and illustration. */
+:root {
+  --shiraz: #a60533;
+  --razzmatazz: #fa166e;
+  --cardinal: #cd0a42;
+  --royal-purple: #7c3aa4;
+  --finn: #61275b;
+  --fuchsia-blue: #8b50d0;
+  --pink-flamingo: #f55df7;
+  --ground: #faf5fc;
+  --surface: #efe3f4;
+  --paper: #fffaff;
+  --ink: #482146;
+  --muted: #705168;
+  --accent: var(--pink-flamingo);
+  --accent-ink: #3b153a;
+  --signal: var(--shiraz);
+  --danger: var(--shiraz);
+  --brand-dark: var(--finn);
+  --brand-deep: #24112c;
+  --highlight: var(--pink-flamingo);
+  --feature-ground: #2b152f;
+  --feature-ink: #fff1fa;
+  --feature-muted: #e1c7e0;
+  --footer-ground: #24112c;
+  --footer-ink: #fff1fa;
+  --footer-muted: #dfc4df;
+  --footer-brand: var(--pink-flamingo);
+}
+:root[data-theme="dark"] {
+  --ground: #1b101f;
+  --surface: #34203c;
+  --paper: #28172f;
+  --ink: #fff1fa;
+  --muted: #d4b9d4;
+  --signal: var(--pink-flamingo);
+  --danger: #ffa7c8;
+  --feature-ground: #f4e5f7;
+  --feature-ink: var(--finn);
+  --feature-muted: #6d4569;
+  --footer-ground: #edddf3;
+  --footer-ink: #482146;
+  --footer-muted: #6d4569;
+  --footer-brand: var(--finn);
+}
+.button.primary,
+.footer-launch,
+:root[data-theme="dark"] :is(.launch-hero, .privacy-section) .button.primary,
+:root[data-theme="dark"] .footer-launch {
+  background: var(--shiraz);
+  color: #fff1fa;
+}
+.button.primary:hover:not(:disabled),
+.footer-launch:hover,
+:root[data-theme="dark"]
+  :is(.launch-hero, .privacy-section)
+  .button.primary:hover,
+:root[data-theme="dark"] .footer-launch:hover {
+  background: var(--cardinal);
+}
+.button:not(.primary):not(.subtle) {
+  background: var(--finn);
+  color: #fff1fa;
+}
+.button:not(.primary):not(.subtle):hover:not(:disabled) {
+  background: var(--royal-purple);
+}
+:root[data-theme="dark"] .button:not(.primary):not(.subtle) {
+  background: #eedaf5;
+  color: #482146;
+}
+:root[data-theme="dark"]
+  .button:not(.primary):not(.subtle):hover:not(:disabled) {
+  background: #fff1fa;
+}
+.radar-self {
+  background: #f4c1f6;
+}
+.help-footer span {
+  color: #e1c7e0;
+}
+.help-page .faq-list > h2 {
+  font-size: 26px;
+  margin-bottom: 24px;
+}
+.radar-device[aria-pressed="true"] {
+  background: var(--pink-flamingo);
+  color: #482146;
+}
+:root[data-theme="dark"] .launch-join:hover,
+:root[data-theme="dark"] .privacy-copy > :is(svg, .text-button) {
+  color: var(--shiraz);
+}
+::selection {
+  color: #fff1fa;
+  background: var(--shiraz);
+}
+:focus-visible {
+  outline-color: var(--signal);
+}
+.launch-hero :focus-visible {
+  outline-color: var(--pink-flamingo);
+}
+:root[data-theme="dark"] .launch-hero :focus-visible {
+  outline-color: var(--shiraz);
+}
+@media (prefers-reduced-motion: reduce) {
+  .live-text:hover .live-word {
+    transform: none;
+  }
+}

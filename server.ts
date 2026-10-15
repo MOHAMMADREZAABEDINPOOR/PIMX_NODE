@@ -1,242 +1,243 @@
+import "dotenv/config";
 import express from "express";
-import { createServer as createHttpServer } from "http";
+import { createServer } from "node:http";
+import path from "node:path";
+import { createHmac, randomUUID } from "node:crypto";
 import { WebSocketServer, WebSocket } from "ws";
-import path from "path";
 import { createServer as createViteServer } from "vite";
 
-interface PeerConnection {
+type Peer = {
   ws: WebSocket;
   id: string;
   name: string;
-  deviceType: "desktop" | "mobile";
-  deviceDetail?: string;
+  deviceType: string;
   roomId: string;
+  alive: boolean;
+};
+type Room = {
+  peers: Map<string, Peer>;
+  host: string;
+  locked: boolean;
+  maxPeers: number;
+  expiresAt: number;
+  blocked: Set<string>;
+};
+const rooms = new Map<string, Room>();
+const send = (ws: WebSocket, value: unknown) => {
+  if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(value));
+};
+function publish(room: Room) {
+  for (const peer of room.peers.values())
+    send(peer.ws, {
+      type: "peers",
+      peers: [...room.peers.values()]
+        .filter((p) => p.id !== peer.id)
+        .map(({ id, name, deviceType }) => ({ id, name, deviceType })),
+      room: {
+        host: room.host,
+        locked: room.locked,
+        maxPeers: room.maxPeers,
+        expiresAt: room.expiresAt,
+      },
+    });
 }
-
-async function startServer() {
-  const app = express();
-  const httpServer = createHttpServer(app);
-  const PORT = 3000;
-
-  // In-memory registry of active peer connections
-  const peers = new Map<string, PeerConnection>();
-
-  // High-performance nested Map index mapping roomId -> Map of peerId -> PeerConnection
-  // This reduces room filtering complexity from O(N) linear scans to O(1) constant-time direct indexing,
-  // preventing CPU saturation when thousands of concurrent rooms are used simultaneously.
-  const rooms = new Map<string, Map<string, PeerConnection>>();
-
-  // Helper to get all peers in a specific room
-  function getPeersInRoom(roomId: string): PeerConnection[] {
-    const roomMap = rooms.get(roomId);
-    if (!roomMap) return [];
-    return Array.from(roomMap.values());
-  }
-
-  // Helper to send a JSON message to a specific peer
-  function sendJson(ws: WebSocket, message: any) {
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify(message));
-    }
-  }
-
-  // Broadcast peer list update to all peers in a room
-  function broadcastPeersList(roomId: string) {
-    const roomPeers = getPeersInRoom(roomId);
-    const peerListData = roomPeers.map((p) => ({
-      id: p.id,
-      name: p.name,
-      deviceType: p.deviceType,
-      deviceDetail: p.deviceDetail,
-    }));
-
-    for (const peer of roomPeers) {
-      sendJson(peer.ws, {
-        type: "peers",
-        peers: peerListData.filter((p) => p.id !== peer.id), // Send others, not including self
-      });
-    }
-  }
-
-  // Initialize the WebSocket Signaling Server
-  const wss = new WebSocketServer({ noServer: true });
-
-  // Passive Ping-Pong Heartbeat checking to automatically prune dead socket connections (ghost connections)
-  // that dropped without sending a formal WebSockets close event. This saves system memory under heavy concurrent user spikes.
-  const heartbeatInterval = setInterval(() => {
-    wss.clients.forEach((client: any) => {
-      if (client.isAlive === false) {
-        console.log("[HEARTBEAT] Pruning stale websocket connection targeting ghost peer");
-        return client.terminate();
-      }
-      client.isAlive = false;
-      client.ping();
-    });
-  }, 25000); // 25s probe cycle
-
-  wss.on("close", () => {
-    clearInterval(heartbeatInterval);
+async function start() {
+  const app = express(),
+    http = createServer(app);
+  const wss = new WebSocketServer({ noServer: true, maxPayload: 128 * 1024 });
+  http.on("upgrade", (req, socket, head) => {
+    if (
+      new URL(req.url || "/", "http://localhost").pathname === "/ws-signaling"
+    )
+      wss.handleUpgrade(req, socket, head, (ws) =>
+        wss.emit("connection", ws, req),
+      );
   });
-
-  // Handle standard HTTP Upgrade to WebSocket connections
-  httpServer.on("upgrade", (request, socket, head) => {
-    const url = request.url || "";
-    console.log(`[WS UPGRADE] Received upgrade request for URL: ${url}`);
-    
-    // Only intercept upgrades intended for the signaling service path
-    if (url.includes("/ws-signaling") || url.startsWith("/ws-signaling")) {
-      console.log(`[WS UPGRADE] Path matched ws-signaling. Upgrading connection...`);
-      wss.handleUpgrade(request, socket, head, (ws) => {
-        console.log(`[WS UPGRADE] Upgrade successful, emitting connection...`);
-        wss.emit("connection", ws, request);
-      });
-    } else {
-      console.log(`[WS UPGRADE] Path did not match ws-signaling, ignoring upgrading.`);
-    }
-  });
-
-  wss.on("connection", (ws: any, req) => {
-    console.log(`[WSS] New WebSocket connection socket established. URL: ${req.url}`);
-    
-    // Setup ping-pong state
-    ws.isAlive = true;
+  wss.on("connection", (ws: WebSocket) => {
+    let current: Peer | undefined;
+    const idle = setTimeout(() => {
+      if (!current) ws.close(1008, "Join timeout");
+    }, 10_000);
+    let windowStart = Date.now(),
+      messages = 0;
     ws.on("pong", () => {
-      ws.isAlive = true;
+      if (current) current.alive = true;
     });
-
-    let currentPeerId: string | null = null;
-    let currentRoomId: string | null = null;
-
-    ws.on("message", (rawMessage: string) => {
+    ws.on("message", (raw) => {
+      if (Date.now() - windowStart > 1000) {
+        messages = 0;
+        windowStart = Date.now();
+      }
+      if (++messages > 100) return ws.close(1008, "Rate limit");
       try {
-        const message = JSON.parse(rawMessage);
-        const { type } = message;
-
-        switch (type) {
-          case "join": {
-            const { id, name, deviceType, deviceDetail, roomId } = message;
-            if (!id || !roomId) {
-              return;
-            }
-
-            // Cleanup any existing registration for this peer ID
-            if (peers.has(id)) {
-              try {
-                const oldPeer = peers.get(id);
-                if (oldPeer) {
-                  oldPeer.ws.close();
-                  const roomMap = rooms.get(oldPeer.roomId);
-                  if (roomMap) {
-                    roomMap.delete(id);
-                    if (roomMap.size === 0) {
-                      rooms.delete(oldPeer.roomId);
-                    }
-                  }
-                }
-              } catch (e) {}
-              peers.delete(id);
-            }
-
-            currentPeerId = id;
-            currentRoomId = roomId;
-
-            const peerObj: PeerConnection = {
-              ws,
-              id,
-              name: name || "Anonymous Peer",
-              deviceType: deviceType || "desktop",
-              deviceDetail: deviceDetail || "",
-              roomId,
+        const m = JSON.parse(raw.toString());
+        if (m.type === "join") {
+          if (current) return;
+          if (
+            !/^[a-zA-Z0-9_-]{6,80}$/.test(m.roomId) ||
+            !/^[a-zA-Z0-9-]{16,64}$/.test(m.id)
+          )
+            return ws.close(1008, "Invalid room");
+          let room = rooms.get(m.roomId);
+          if (room && room.expiresAt <= Date.now())
+            return send(ws, { type: "error", code: "expired" });
+          if (room?.blocked.has(m.id))
+            return send(ws, { type: "error", code: "removed" });
+          if (room?.peers.has(m.id))
+            return send(ws, { type: "error", code: "duplicate" });
+          if (
+            room &&
+            ((room.locked && room.host !== m.id) ||
+              room.peers.size >= room.maxPeers)
+          )
+            return send(ws, {
+              type: "error",
+              code: room.locked ? "locked" : "full",
+            });
+          if (!room) {
+            room = {
+              peers: new Map(),
+              host: m.id,
+              locked: false,
+              maxPeers: 8,
+              expiresAt: Date.now() + 3600_000,
+              blocked: new Set(),
             };
-
-            // Register this peer
-            peers.set(id, peerObj);
-
-            if (!rooms.has(roomId)) {
-              rooms.set(roomId, new Map());
-            }
-            rooms.get(roomId)!.set(id, peerObj);
-
-            // Confirm registration
-            sendJson(ws, { type: "registered", id });
-
-            // Broadcast updated peer list to this room
-            broadcastPeersList(roomId);
-            break;
+            rooms.set(m.roomId, room);
           }
-
-          case "signal": {
-            // Forward signaling messages (sdp offer, sdp answer, ice candidates) to target peer
-            const { to, data } = message;
-            if (!to || !data) return;
-
-            const targetPeer = peers.get(to);
-            if (targetPeer && currentPeerId) {
-              sendJson(targetPeer.ws, {
-                type: "signal",
-                from: currentPeerId,
-                data,
-              });
-            }
-            break;
-          }
-
-          default:
-            console.warn(`Unknown websocket message type received: ${type}`);
+          if (!room.peers.size) room.host = m.id;
+          current = {
+            ws,
+            id: m.id,
+            name: String(m.name || "Device").slice(0, 40),
+            deviceType: m.deviceType === "mobile" ? "mobile" : "desktop",
+            roomId: m.roomId,
+            alive: true,
+          };
+          room.peers.set(current.id, current);
+          clearTimeout(idle);
+          send(ws, { type: "registered", id: current.id });
+          publish(room);
+          return;
         }
-      } catch (err) {
-        console.error("Failed to parse websocket message", err);
+        if (!current) return;
+        const room = rooms.get(current.roomId);
+        if (!room) return;
+        if (m.type === "signal") {
+          const target = room.peers.get(m.to);
+          if (target && m.data && JSON.stringify(m.data).length < 100_000)
+            send(target.ws, { type: "signal", from: current.id, data: m.data });
+        } else if (m.type === "rename") {
+          current.name = String(m.name || "Device").slice(0, 40);
+          publish(room);
+        } else if (m.type === "room-settings" && room.host === current.id) {
+          room.locked = !!m.locked;
+          room.maxPeers = Math.max(2, Math.min(16, Number(m.maxPeers) || 8));
+          room.expiresAt =
+            Date.now() +
+            Math.max(5, Math.min(1440, Number(m.minutes) || 60)) * 60_000;
+          publish(room);
+        } else if (
+          m.type === "kick" &&
+          room.host === current.id &&
+          m.id !== current.id
+        ) {
+          const target = room.peers.get(m.id);
+          if (target) {
+            room.blocked.add(target.id);
+            send(target.ws, { type: "error", code: "removed" });
+            target.ws.close(1008, "Removed by room owner");
+          }
+        }
+      } catch {
+        send(ws, { type: "error", code: "invalid" });
       }
     });
-
     ws.on("close", () => {
-      if (currentPeerId) {
-        peers.delete(currentPeerId);
-        if (currentRoomId) {
-          const roomMap = rooms.get(currentRoomId);
-          if (roomMap) {
-            roomMap.delete(currentPeerId);
-            if (roomMap.size === 0) {
-              rooms.delete(currentRoomId);
-            }
-          }
+      clearTimeout(idle);
+      if (!current) return;
+      const room = rooms.get(current.roomId);
+      if (!room || room.peers.get(current.id)?.ws !== ws) return;
+      room.peers.delete(current.id);
+      if (room.host === current.id && room.peers.size) {
+        room.host = room.peers.keys().next().value!;
+        room.locked = false;
+      }
+      publish(room);
+    });
+    ws.on("error", () => ws.close());
+  });
+  const heartbeat = setInterval(() => {
+    for (const [id, room] of rooms) {
+      if (room.expiresAt <= Date.now()) {
+        for (const peer of room.peers.values()) {
+          send(peer.ws, { type: "error", code: "expired" });
+          peer.ws.close();
+        }
+        rooms.delete(id);
+        continue;
+      }
+      for (const peer of room.peers.values()) {
+        if (!peer.alive) peer.ws.terminate();
+        else {
+          peer.alive = false;
+          peer.ws.ping();
         }
       }
-      if (currentRoomId) {
-        broadcastPeersList(currentRoomId);
-      }
-    });
-
-    ws.on("error", (err) => {
-      console.error(`WebSocket error for peer ${currentPeerId || "unknown"}:`, err);
-    });
+    }
+  }, 25_000);
+  heartbeat.unref();
+  wss.on("close", () => clearInterval(heartbeat));
+  app.get("/api/health", (_req, res) =>
+    res.json({
+      status: "healthy",
+      activePeers: [...rooms.values()].reduce((n, r) => n + r.peers.size, 0),
+      activeRooms: rooms.size,
+    }),
+  );
+  app.get("/api/rtc-config", (_req, res) => {
+    const iceServers: unknown[] = [{ urls: "stun:stun.l.google.com:19302" }];
+    if (process.env.TURN_URL && process.env.TURN_SHARED_SECRET) {
+      const username = `${Math.floor(Date.now() / 1000) + 3600}:${randomUUID()}`;
+      iceServers.push({
+        urls: process.env.TURN_URL.split(","),
+        username,
+        credential: createHmac("sha1", process.env.TURN_SHARED_SECRET)
+          .update(username)
+          .digest("base64"),
+      });
+    } else if (
+      process.env.TURN_URL &&
+      process.env.TURN_USERNAME &&
+      process.env.TURN_CREDENTIAL
+    )
+      iceServers.push({
+        urls: process.env.TURN_URL.split(","),
+        username: process.env.TURN_USERNAME,
+        credential: process.env.TURN_CREDENTIAL,
+      });
+    res.setHeader("Cache-Control", "no-store");
+    res.json({ iceServers, relayAvailable: iceServers.length > 1 });
   });
-
-  // REST API Endpoints
-  app.get("/api/health", (req, res) => {
-    res.json({ status: "healthy", activePeers: peers.size });
-  });
-
-  // Serve static files / Vite middleware
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        hmr: process.env.DISABLE_HMR === "true" ? false : { server: http },
+      },
       appType: "spa",
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
+    const dist = path.join(process.cwd(), "dist");
+    app.use(express.static(dist));
+    app.get("*", (_req, res) => res.sendFile(path.join(dist, "index.html")));
   }
-
-  httpServer.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server is running at http://0.0.0.0:${PORT}`);
-  });
+  http.listen(Number(process.env.PORT) || 3000, "0.0.0.0", () =>
+    console.log(`PIMXNODE http://localhost:${process.env.PORT || 3000}`),
+  );
 }
-
-startServer().catch((err) => {
-  console.error("Failed to start server:", err);
+start().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
 });

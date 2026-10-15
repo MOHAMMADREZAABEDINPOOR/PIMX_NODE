@@ -275,15 +275,15 @@ export default function AdminPanel({
       <div
         dir="ltr"
         className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-colors ${
-          theme === "dark" ? "bg-[#040810]" : "bg-slate-100"
+          theme === "dark" ? "bg-[#0d070d]" : "bg-slate-100"
         }`}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(20,184,166,0.04)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(250,22,110,0.04)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
         <div
           className={`w-full max-w-md rounded-2xl border p-8 transition-all relative ${
             theme === "dark"
-              ? "bg-[#0b1324] border-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+              ? "bg-[#1e101f] border-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
               : "bg-white border-slate-200 shadow-xl"
           }`}
         >
@@ -301,8 +301,8 @@ export default function AdminPanel({
           </button>
 
           <div className="text-center mb-8">
-            <div className="mx-auto h-12 w-12 bg-teal-500/15 text-teal-400 rounded-xl flex items-center justify-center mb-4 border border-teal-500/30">
-              <Shield className="h-6 w-6 text-teal-400" />
+            <div className="mx-auto h-12 w-12 bg-pink-500/15 text-pink-400 rounded-xl flex items-center justify-center mb-4 border border-pink-500/30">
+              <Shield className="h-6 w-6 text-pink-400" />
             </div>
             <h2
               className={`text-xl font-bold font-sans tracking-tight ${
@@ -333,8 +333,8 @@ export default function AdminPanel({
                   placeholder="pimxnode"
                   className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-sans font-medium transition-all ${
                     theme === "dark"
-                      ? "bg-slate-950 border-slate-800 text-white focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
-                      : "bg-slate-50 border-slate-200 text-slate-950 focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                      ? "bg-slate-950 border-slate-800 text-white focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
+                      : "bg-slate-50 border-slate-200 text-slate-950 focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
                   }`}
                 />
               </div>
@@ -356,8 +356,8 @@ export default function AdminPanel({
                   placeholder="••••••••••••"
                   className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-sans transition-all ${
                     theme === "dark"
-                      ? "bg-slate-950 border-slate-800 text-white focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
-                      : "bg-slate-50 border-slate-200 text-slate-950 focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                      ? "bg-slate-950 border-slate-800 text-white focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
+                      : "bg-slate-50 border-slate-200 text-slate-950 focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
                   }`}
                 />
               </div>
@@ -372,7 +372,7 @@ export default function AdminPanel({
 
             <button
               type="submit"
-              className="w-full bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold py-3 px-4 rounded-xl text-sm transition-all shadow-lg shadow-teal-500/10 cursor-pointer active:scale-[98%]"
+              className="w-full bg-pink-500 hover:bg-pink-400 text-slate-950 font-bold py-3 px-4 rounded-xl text-sm transition-all shadow-lg shadow-pink-500/10 cursor-pointer active:scale-[98%]"
             >
               {lang === "fa" ? "تایید و ورود امن" : "Authenticate Entry"}
             </button>
@@ -388,12 +388,12 @@ export default function AdminPanel({
       dir="ltr"
       className={`min-h-screen flex flex-col font-sans transition-colors duration-300 relative w-full ${
         theme === "dark"
-          ? "bg-[#070b13] text-[#f1f5f9]"
-          : "bg-[#f8fafc] text-slate-900"
+          ? "bg-[#110911] text-[#f8f2f8]"
+          : "bg-[#fbf9fb] text-slate-900"
       }`}
     >
       {/* Interactive glowing nodes */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(250,22,110,0.02)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
 
       {/* Main Admin Navbar */}
       <header
@@ -405,12 +405,12 @@ export default function AdminPanel({
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 bg-gradient-to-tr from-teal-500 to-emerald-500 rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-teal-500/20">
+            <div className="h-10 w-10 bg-gradient-to-tr from-pink-500 to-fuchsia-500 rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-pink-500/20">
               <Shield className="h-5 w-5 text-slate-950" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-lg md:text-xl font-bold bg-gradient-to-r from-teal-400 via-emerald-400 to-sky-400 bg-clip-text text-transparent">
+                <h1 className="text-lg md:text-xl font-bold bg-gradient-to-r from-pink-400 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent">
                   Admin Panel
                 </h1>
                 <span className="text-[9px] bg-red-500/10 text-red-500 dark:text-red-400 border border-red-500/20 rounded px-1.5 py-0.5 font-bold uppercase tracking-widest font-mono">
@@ -432,8 +432,8 @@ export default function AdminPanel({
                 onChange={(e) => setSelectedRange(e.target.value)}
                 className={`text-xs px-2.5 py-1.5 rounded-lg border focus:ring-1 font-mono cursor-pointer transition-all ${
                   theme === "dark"
-                    ? "bg-slate-950 border-slate-800 text-white focus:ring-teal-500"
-                    : "bg-white border-slate-200 text-slate-800 focus:ring-teal-500"
+                    ? "bg-slate-950 border-slate-800 text-white focus:ring-pink-500"
+                    : "bg-white border-slate-200 text-slate-800 focus:ring-pink-500"
                 }`}
               >
                 {TIME_RANGES.map((item) => (
@@ -484,12 +484,12 @@ export default function AdminPanel({
           >
             <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
               <span className="text-[10px] font-bold tracking-wider font-mono">VISITS</span>
-              <Activity className="h-4 w-4 text-teal-500" />
+              <Activity className="h-4 w-4 text-pink-500" />
             </div>
-            <p className="text-2xl font-bold font-mono text-teal-500">
+            <p className="text-2xl font-bold font-mono text-pink-500">
               {systemLogs.length.toLocaleString()}
             </p>
-            <p className="text-[10px] text-emerald-400 font-semibold mt-1 font-sans">
+            <p className="text-[10px] text-fuchsia-400 font-semibold mt-1 font-sans">
               {systemLogs.length > 0 ? "Realtime log active" : "Starting telemetry..."}
             </p>
           </div>
@@ -503,9 +503,9 @@ export default function AdminPanel({
           >
             <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
               <span className="text-[10px] font-bold tracking-wider font-mono">ACTIVE PEERS</span>
-              <Users className="h-4 w-4 text-emerald-500" />
+              <Users className="h-4 w-4 text-fuchsia-500" />
             </div>
-            <p className="text-2xl font-bold font-mono text-emerald-500">
+            <p className="text-2xl font-bold font-mono text-fuchsia-500">
               {activePeersCount}
             </p>
             <p className="text-[10px] text-slate-400 mt-1 font-sans">
@@ -522,9 +522,9 @@ export default function AdminPanel({
           >
             <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
               <span className="text-[10px] font-bold tracking-wider font-mono">ROOMS ACTIVE</span>
-              <RefreshCw className="h-4 w-4 text-sky-500 animate-spin-slow" />
+              <RefreshCw className="h-4 w-4 text-purple-500 animate-spin-slow" />
             </div>
-            <p className="text-2xl font-bold font-mono text-sky-500">
+            <p className="text-2xl font-bold font-mono text-purple-500">
               {activePeersCount > 0 ? 1 : 0}
             </p>
             <p className="text-[10px] text-slate-400 mt-1 font-sans font-sans">
@@ -546,7 +546,7 @@ export default function AdminPanel({
             <p className="text-2xl font-bold font-mono text-purple-500">
               {sessionTransfersCount}
             </p>
-            <p className="text-[10px] text-emerald-400 font-semibold mt-1 font-sans">
+            <p className="text-[10px] text-fuchsia-400 font-semibold mt-1 font-sans">
               {sessionTransfersCount > 0 ? "Data transfers indexed" : "No files routed yet"}
             </p>
           </div>
@@ -560,9 +560,9 @@ export default function AdminPanel({
           >
             <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
               <span className="text-[10px] font-bold tracking-wider font-mono">VOLUME INJECTED</span>
-              <HardDrive className="h-4 w-4 text-teal-400" />
+              <HardDrive className="h-4 w-4 text-pink-400" />
             </div>
-            <p className="text-2xl font-bold font-mono text-teal-400">
+            <p className="text-2xl font-bold font-mono text-pink-400">
               {(() => {
                 if (sessionTransfersVolume === 0) return "0 Bytes";
                 const k = 1024;
@@ -571,7 +571,7 @@ export default function AdminPanel({
                 return parseFloat((sessionTransfersVolume / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
               })()}
             </p>
-            <p className="text-[10px] text-teal-400 font-semibold mt-1 font-sans">
+            <p className="text-[10px] text-pink-400 font-semibold mt-1 font-sans">
               {sessionTransfersVolume > 0 ? "E2E direct data payload" : "0 bytes streamed yet"}
             </p>
           </div>
@@ -590,7 +590,7 @@ export default function AdminPanel({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-semibold tracking-wide">Visits Trend</h3>
-                <span className="text-[10px] font-mono text-teal-500 bg-teal-500/10 px-2 py-0.5 rounded border border-teal-500/20">
+                <span className="text-[10px] font-mono text-pink-500 bg-pink-500/10 px-2 py-0.5 rounded border border-pink-500/20">
                   Range: {TIME_RANGES.find((t) => t.value === selectedRange)?.label}
                 </span>
               </div>
@@ -604,8 +604,8 @@ export default function AdminPanel({
               <svg className="w-full h-full overflow-visible" viewBox="0 0 500 140" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="purpleGlow" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#c084fc" stopOpacity="0.25" />
-                    <stop offset="100%" stopColor="#c084fc" stopOpacity="0.0" />
+                    <stop offset="0%" stopColor="#f55df7" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#f55df7" stopOpacity="0.0" />
                   </linearGradient>
                 </defs>
 
@@ -627,7 +627,7 @@ export default function AdminPanel({
                   <path
                     d={trendData.pathD}
                     fill="none"
-                    stroke="#c084fc"
+                    stroke="#f55df7"
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     className="transition-all duration-300"
@@ -692,7 +692,7 @@ export default function AdminPanel({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-semibold tracking-wide">Generations Trend</h3>
-                <span className="text-[10px] font-mono text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded border border-teal-500/20">
+                <span className="text-[10px] font-mono text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded border border-pink-500/20">
                   E2E Channels
                 </span>
               </div>
@@ -706,8 +706,8 @@ export default function AdminPanel({
               <svg className="w-full h-full overflow-visible" viewBox="0 0 500 140" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="tealGlow" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.2" />
-                    <stop offset="100%" stopColor="#14b8a6" stopOpacity="0.0" />
+                    <stop offset="0%" stopColor="#fa166e" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#fa166e" stopOpacity="0.0" />
                   </linearGradient>
                 </defs>
 
@@ -719,7 +719,7 @@ export default function AdminPanel({
                 {/* Shaded Area under path curve */}
                 {trendData.pathD && (
                   <path
-                    d={`${trendData.pathD.replaceAll("#c084fc", "#14b8a6")} L ${trendData.points[trendData.points.length - 1].x} 120 L ${trendData.points[0].x} 120 Z`}
+                    d={`${trendData.pathD.replaceAll("#f55df7", "#fa166e")} L ${trendData.points[trendData.points.length - 1].x} 120 L ${trendData.points[0].x} 120 Z`}
                     fill="url(#tealGlow)"
                   />
                 )}
@@ -729,7 +729,7 @@ export default function AdminPanel({
                   <path
                     d={trendData.pathD}
                     fill="none"
-                    stroke="#14b8a6"
+                    stroke="#fa166e"
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     className="transition-all duration-300"
@@ -743,7 +743,7 @@ export default function AdminPanel({
                       cx={pt.x}
                       cy={pt.y}
                       r="4"
-                      className="fill-slate-950 stroke-teal-400 stroke-[2px] transition-transform hover:scale-150 cursor-help"
+                      className="fill-slate-950 stroke-pink-400 stroke-[2px] transition-transform hover:scale-150 cursor-help"
                     />
                   </g>
                 ))}
@@ -800,8 +800,8 @@ export default function AdminPanel({
             <div className="space-y-4">
               {Object.entries(deviceShare).map(([device, pct]) => {
                 const getLabelIcon = (type: string) => {
-                  if (type === "Android" || type === "iPhone") return <Smartphone className="h-4 w-4 shrink-0 text-teal-400" />;
-                  if (type === "iPad") return <Tablet className="h-4 w-4 shrink-0 text-cyan-400" />;
+                  if (type === "Android" || type === "iPhone") return <Smartphone className="h-4 w-4 shrink-0 text-pink-400" />;
+                  if (type === "iPad") return <Tablet className="h-4 w-4 shrink-0 text-purple-400" />;
                   return <Monitor className="h-4 w-4 shrink-0 text-slate-400" />;
                 };
 
@@ -820,7 +820,7 @@ export default function AdminPanel({
                     {/* Styled nested high-tech percentage progress logs */}
                     <div className="h-2 w-full bg-slate-200 dark:bg-slate-900 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all duration-1000"
+                        className="h-full bg-gradient-to-r from-pink-500 to-purple-500 transition-all duration-1000"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -864,10 +864,10 @@ export default function AdminPanel({
                     .map((log, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-[#0d1527] border-slate-800/40"
+                        className="flex items-center justify-between p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-[#221123] border-slate-800/40"
                       >
                         <div className="flex items-center gap-2">
-                          <div className="h-7 w-7 rounded bg-teal-500/10 flex items-center justify-center text-teal-400">
+                          <div className="h-7 w-7 rounded bg-pink-500/10 flex items-center justify-center text-pink-400">
                             <Smartphone className="h-4 w-4" />
                           </div>
                           <div>
@@ -875,7 +875,7 @@ export default function AdminPanel({
                               {log.peerName || "Anonymous Visitor"}
                             </p>
                             <span className="text-[10px] font-mono text-slate-500 flex flex-wrap items-center gap-1">
-                              {log.device && <span className="text-teal-400">{log.device}</span>}
+                              {log.device && <span className="text-pink-400">{log.device}</span>}
                               {log.browser && <span className="text-purple-400">{log.browser}</span>}
                               {log.country && log.country !== "XX" && (
                                 <span className="text-amber-400">{log.city ? `${log.city}, ` : ""}{log.country}</span>
