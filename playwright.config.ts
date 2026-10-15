@@ -5,7 +5,9 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   use: {
-    baseURL: `http://localhost:${process.env.PORT || 3000}`,
+    baseURL:
+      process.env.TEST_BASE_URL ||
+      `http://localhost:${process.env.PORT || 3000}`,
     launchOptions: {
       ...(process.platform === "win32"
         ? {
@@ -17,10 +19,12 @@ export default defineConfig({
       args: ["--enable-unsafe-swiftshader"],
     },
   },
-  webServer: {
-    command: "npm run dev",
-    url: `http://localhost:${process.env.PORT || 3000}/api/health`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
-  },
+  webServer: process.env.TEST_BASE_URL
+    ? undefined
+    : {
+        command: "npm run dev",
+        url: `http://localhost:${process.env.PORT || 3000}/api/health`,
+        reuseExistingServer: !process.env.CI,
+        timeout: 60_000,
+      },
 });

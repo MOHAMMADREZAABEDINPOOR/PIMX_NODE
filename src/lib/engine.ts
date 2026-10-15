@@ -158,7 +158,7 @@ export class Exchange {
   }
   private connect() {
     const ws = new WebSocket(
-      `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws-signaling`,
+      `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws-signaling?room=${encodeURIComponent(this.roomId)}`,
     );
     this.ws = ws;
     ws.onopen = () =>
@@ -937,7 +937,7 @@ export class Exchange {
   }
   async diagnostics() {
     const started = performance.now();
-    const res = await fetch("/api/health");
+    const res = await fetch(`/api/health?room=${encodeURIComponent(this.roomId)}`);
     if (!res.ok) throw new Error("network");
     const health = await res.json();
     for (const id of this.links.keys()) await this.inspectTransport(id);

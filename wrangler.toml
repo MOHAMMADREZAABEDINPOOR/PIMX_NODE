@@ -16,3 +16,11 @@ pages_build_output_dir = "dist"
 binding = "PIMX_VISITS"
 id = "0b85e62c84584bcdb98dd846c801af61"
 # preview_id = "REPLACE_WITH_YOUR_PREVIEW_KV_ID"  # for local `wrangler pages dev`
+
+[[durable_objects.bindings]]
+name = "SIGNALING"
+class_name = "SignalingRoom"
+script_name = "pimxnode-signaling"
+
+[vars]
+VITE_SITE_URL = "https://pimxnode.pages.dev"

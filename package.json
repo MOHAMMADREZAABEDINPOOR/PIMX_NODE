@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build && tsx scripts/prerender.tsx && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
+    "build": "npm run build:pages && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=build/server.cjs",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit",
+    "lint": "tsc --noEmit && tsc --noEmit -p cloudflare/tsconfig.json",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "start": "node dist/server.cjs"
+    "start": "node build/server.cjs",
+    "build:pages": "vite build && tsx scripts/prerender.tsx",
+    "deploy:signaling": "wrangler deploy --config cloudflare/wrangler.toml",
+    "deploy:pages": "npm run build:pages && wrangler pages deploy dist --project-name pimxnode"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",

@@ -22,5 +22,12 @@
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
-  }
+  },
+  "exclude": [
+    "cloudflare",
+    "node_modules",
+    "dist",
+    "build",
+    "artifacts"
+  ]
 }

@@ -14,6 +14,8 @@
 **[Open PIMX_NODE ↗](https://pimxnode.pages.dev/)**
 <!-- pimx-live-site:end -->
 
+> Current release: full Palette #240 interface, direct encrypted file/folder sharing, and Cloudflare Pages + Durable Objects signaling. See [deployment instructions](DEPLOYMENT.fa.md) and [technical SEO](SEO.md).
+
 A browser file-transfer workspace built around WebRTC data channels, a Node.js WebSocket signaling service and AES-GCM encryption of transferred chunks.
 
 [GitHub](https://github.com/MOHAMMADREZAABEDINPOOR/PIMX_NODE) · [PIMX / Profile](https://github.com/MOHAMMADREZAABEDINPOOR) · [Static artwork](assets/readme/hero.png)

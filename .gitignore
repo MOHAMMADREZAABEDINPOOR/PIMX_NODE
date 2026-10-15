@@ -11,3 +11,6 @@ test-results/
 playwright-report/
 .taste-skill/
 .impeccable/
+
+.wrangler/
+.dev.vars*

@@ -7,7 +7,7 @@
 
 interface Env {
   PIMX_VISITS: KVNamespace;
-  /** Optional: set ADMIN_SECRET env var in CF Pages for basic protection */
+  /** Required to enable access to visitor records. */
   ADMIN_SECRET?: string;
 }
 
@@ -22,15 +22,23 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
   const url = new URL(request.url);
 
-  // Basic secret guard (optional — set ADMIN_SECRET in CF Pages env vars)
+  // Visitor records must never become public when a deployment omits its secret.
   const adminSecret = env.ADMIN_SECRET;
+  if (!adminSecret)
+    return Response.json(
+      { ok: false, error: "Administrative access is not configured" },
+      { status: 503 },
+    );
   if (adminSecret) {
     const provided = url.searchParams.get("secret");
     if (provided !== adminSecret) {
-      return new Response(JSON.stringify({ ok: false, error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ ok: false, error: "Unauthorized" }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
   }
 
@@ -54,7 +62,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
         } catch (_) {
           return null;
         }
-      })
+      }),
     );
 
     // Filter nulls and sort newest first
@@ -72,7 +80,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
       {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      },
     );
   } catch (err: any) {
     return new Response(
@@ -80,7 +88,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      },
     );
   }
 };

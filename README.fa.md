@@ -16,6 +16,8 @@
 **[مشاهدهٔ PIMX_NODE ↗](https://pimxnode.pages.dev/)**
 <!-- pimx-live-site:end -->
 
+> نسخهٔ فعلی: رابط کامل با پالت #240، انتقال رمزگذاری‌شدهٔ فایل و پوشه و سرویس اتصال روی Cloudflare Pages و Durable Objects. [راهنمای استقرار](DEPLOYMENT.fa.md) · [سئوی فنی](SEO.md)
+
 محیط انتقال فایل در مرورگر با کانال داده WebRTC، سرویس سیگنالینگ WebSocket در Node.js و رمزنگاری AES-GCM برای قطعه‌های فایل.
 
 [GitHub](https://github.com/MOHAMMADREZAABEDINPOOR/PIMX_NODE) · [PIMX / Profile](https://github.com/MOHAMMADREZAABEDINPOOR) · [بنر ثابت](assets/readme/hero.png)
