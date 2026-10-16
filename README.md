@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="https://pimxnode.pages.dev/"><img src="assets/readme/hero.gif" width="1200" alt="PIMX NODE: animated project artwork" /></a>
+<a href="https://pimxnode.pages.dev/"><img src="assets/readme/hero.gif" width="1200" alt="PIMX NODE: original animated 3D illustration" /></a>
 
 [English](README.md) · [فارسی](README.fa.md) · [Live website ↗](https://pimxnode.pages.dev/)
 
@@ -11,10 +11,6 @@
 # PIMX NODE
 
 Send files, folders and text between browsers through encrypted WebRTC connections. Invite devices by QR, approve recipients, manage transfer queues and verify file integrity; signaling runs on Node.js or Cloudflare Durable Objects.
-
-<a href="https://pimxnode.pages.dev/"><img src="assets/readme/redesign.gif" width="1200" alt="Preview of the redesigned interface: PIMX NODE" /></a>
-
-[Preview of the redesigned interface · PNG](assets/readme/redesign.png) · [Static artwork](assets/readme/hero.png)
 
 ## What you can do
 
