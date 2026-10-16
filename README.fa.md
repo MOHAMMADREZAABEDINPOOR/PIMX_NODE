@@ -1,179 +1,60 @@
 <div align="center">
 
-<img src="assets/readme/hero.gif" width="1200" alt="PIMX NODE: encrypted files moving between two connected devices" />
+<a href="https://pimxnode.pages.dev/"><img src="assets/readme/hero.gif" width="1200" alt="PIMX NODE: animated project artwork" /></a>
 
-**[English](README.md) · [فارسی](README.fa.md)**
+[English](README.md) · [فارسی](README.fa.md) · [Live website ↗](https://pimxnode.pages.dev/)
+
+[![Live GitHub statistics](https://raw.githubusercontent.com/MOHAMMADREZAABEDINPOOR/MOHAMMADREZAABEDINPOOR/main/assets/readme/live-PIMX_NODE.svg)](https://github.com/MOHAMMADREZAABEDINPOOR/PIMX_NODE)
 
 </div>
 
-<div dir="rtl">
+# PIMX NODE
 
-# 🔗 PIMX NODE
+فایل، پوشه و متن را با اتصال رمزنگاری‌شدهٔ WebRTC بین مرورگرها بفرست. با QR دستگاه دعوت کن، گیرنده را تأیید کن، صف انتقال را مدیریت کن و صحت فایل را بررسی کن؛ سیگنالینگ روی Node.js یا Cloudflare Durable Objects اجرا می‌شود.
 
-<!-- pimx-live-site:start -->
-## وب‌سایت آنلاین
+<a href="https://pimxnode.pages.dev/"><img src="assets/readme/redesign.gif" width="1200" alt="پیش‌نمایش رابط بازطراحی‌شده: PIMX NODE" /></a>
 
-**[مشاهدهٔ PIMX_NODE ↗](https://pimxnode.pages.dev/)**
-<!-- pimx-live-site:end -->
+[پیش‌نمایش رابط بازطراحی‌شده · PNG](assets/readme/redesign.png) · [Static artwork](assets/readme/hero.png)
 
-> نسخهٔ فعلی: رابط کامل با پالت #240، انتقال رمزگذاری‌شدهٔ فایل و پوشه و سرویس اتصال روی Cloudflare Pages و Durable Objects. [راهنمای استقرار](DEPLOYMENT.fa.md) · [سئوی فنی](SEO.md)
+## امکانات
 
-محیط انتقال فایل در مرورگر با کانال داده WebRTC، سرویس سیگنالینگ WebSocket در Node.js و رمزنگاری AES-GCM برای قطعه‌های فایل.
+- اتاق با QR، تأیید گیرنده و اشتراک فایل، پوشه و متن با چند گیرنده
+- کنترل صف، اتصال و ادامهٔ مجدد و بررسی صحت فایل
+- وضعیت اتصال سه‌بعدی زنده، عیب‌یابی، تاریخچهٔ محلی و PWA نصب‌شدنی
 
-[GitHub](https://github.com/MOHAMMADREZAABEDINPOOR/PIMX_NODE) · [PIMX / Profile](https://github.com/MOHAMMADREZAABEDINPOOR) · [بنر ثابت](assets/readme/hero.png)
+## یک اتاق برای دستگاه‌هایت
 
-| نمای کلی | جزئیات |
-|:---|:---|
-| 🔗 تجربه | برنامه وب / تجربه مرورگری |
-| 🧰 فناوری | `React` · `Vite` · `TypeScript` · `Express` |
-| 🌐 زبان راهنما | [English](README.md) · [فارسی](README.fa.md) |
+اتاق بساز و با لینک یا QR مرورگر دیگری را دعوت کن. انتقال ورودی را تأیید کن، فایل یا پوشه بفرست، متن به اشتراک بگذار و گیرنده‌ها را انتخاب کن. کنترل صف، اتصال و ادامهٔ مجدد، پیش‌نمایش، عیب‌یابی اتصال و تاریخچهٔ محلی کمک می‌کنند پیشرفت واقعی انتقال را دنبال کنی. شبکهٔ سه‌بعدی به رخدادهای اتصال و انتقال واکنش نشان می‌دهد.
 
-[✨ امکانات](#امکانات) · [🚀 شروع کار](#شروع-کار) · [⚙️ تنظیمات](#تنظیمات) · [🌍 استقرار](#استقرار)
+دادهٔ فایل با WebRTC، قطعه‌های رمزنگاری‌شده و بررسی صحت منتقل می‌شود. سرویس سیگنالینگ ارتباط همتاها را هماهنگ می‌کند و محتوای فایل را ذخیره نمی‌کند. اگر اتصال مستقیم ممکن نباشد، TURN می‌تواند ترافیک رمزنگاری‌شده را عبور دهد. هر دو مرورگر باید آنلاین و باز بمانند؛ نصب آفلاین جای اتصال زنده را نمی‌گیرد. ادامهٔ انتقال به وضعیت جلسه و دسترسی به فایل مبدأ وابسته است و پیش‌نمایش به پشتیبانی مرورگر از فرمت بستگی دارد.
 
----
+## اجرای محلی
 
-<a id="امکانات"></a>
+Node.js نسخهٔ 22.12 یا جدیدتر لازم است.
 
-## ✨ امکانات
-
-| بخش | قابلیت موجود |
-|:---|:---|
-| ⚡ روند کار | ساخت اتاق و نمایش کاربران متصل |
-| 🔐 حفاظت | انتقال قطعه‌های رمزنگاری‌شده از کانال WebRTC |
-| 🌐 تجربه کاربری | رابط انگلیسی و فارسی و ذخیره پوسته |
-| 🔌 اتصال | سرور سیگنالینگ Node و مسیرهای اختیاری آمار بازدید Pages |
-
-<a id="پشته-فنی"></a>
-
-## 🧰 پشته فنی
-
-| ابزار | نسخه یا منبع |
-|---|---|
-| React | `^19.0.1` |
-| Vite | `^6.2.3` |
-| TypeScript | `~5.8.2` |
-| Express | `^4.21.2` |
-| Motion | `^12.23.24` |
-| Tailwind CSS | `^4.1.14` |
-
-<a id="شروع-کار"></a>
-
-## 🚀 شروع کار
-
-Node.js 22.12 یا بالاتر و مدیر پکیج مشخص‌شده در package.json. نسخه وابستگی‌ها را مطابق فایل قفل نصب کنید.
-
-<div dir="ltr">
-
-```bash
-git clone https://github.com/MOHAMMADREZAABEDINPOOR/PIMX_NODE.git
-cd PIMX_NODE
-
+```sh
 npm ci
 npm run dev
 ```
 
-</div>
-
-<a id="تنظیمات"></a>
-
-## ⚙️ تنظیمات
-
-کلیدهای زیر از فایل نمونه یا کد استخراج شده‌اند؛ همه الزاماً اجباری نیستند. مقدار و پیش‌فرض را در همان فایل بررسی و اسرار را فقط در محیط محلی یا هاست تنظیم کنید.
-
-| نام | کاربرد |
-|---|---|
-| `APP_URL` | تنظیم برنامه؛ تعریف را در منبع بررسی کنید |
-| `GEMINI_API_KEY` | اعتبارنامه یا اتصال؛ خصوصی نگه دارید |
-
-اتصال‌های میزبانی: `PIMX_VISITS`.
-
-<a id="استفاده"></a>
-
-## 🎯 استفاده
-
-سرور Node را اجرا کنید، یک اتاق مشترک را در دو مرورگر باز کنید، اتصال را برقرار و فایل را انتخاب کنید. تا پایان انتقال هر دو تب باز بمانند.
-
-<a id="ساختار-پروژه"></a>
-
-## 🗂️ ساختار پروژه
-
-| مسیر | نقش |
-|---|---|
-| [`assets/`](assets/) | فایل برند، رسانه و README |
-| [`functions/`](functions/) | توابع API میزبانی |
-| [`src/`](src/) | کد برنامه |
-| [`index.html`](index.html) | فایل ورودی یا تنظیم پروژه |
-| [`metadata.json`](metadata.json) | فایل ورودی یا تنظیم پروژه |
-| [`package.json`](package.json) | فایل ورودی یا تنظیم پروژه |
-| [`tsconfig.json`](tsconfig.json) | فایل ورودی یا تنظیم پروژه |
-| [`wrangler.toml`](wrangler.toml) | فایل ورودی یا تنظیم پروژه |
-
-<a id="فرمان‌ها-و-بررسی"></a>
-
-## 🧪 فرمان‌ها و بررسی
+سرور را در دو مرورگر باز کنید و وارد یک اتاق شوید. برای `PORT`، تنظیمات اختیاری TURN و `VITE_SITE_URL` فایل [.env.example](.env.example) را ببینید.
 
 | فرمان | کاربرد |
-|:---|:---|
-| `npm run dev` | 🧑‍💻 سرور توسعه |
-| `npm run build` | 📦 ساخت نسخه انتشار |
-| `npm run preview` | 👀 پیش‌نمایش خروجی |
-| `npm run lint` | 🧹 بررسی سبک کد |
+| --- | --- |
+| `npm run lint` | بررسی TypeScript برنامه و Worker |
+| `npm test` | آزمون انتقال و رابط با Playwright |
+| `npm run build:pages` | ساخت فرانت‌اند استاتیک و صفحه‌های SEO |
+| `npm run build` | ساخت فرانت‌اند و سرور سیگنالینگ Node |
+| `npm start` | اجرای `build/server.cjs` پس از ساخت |
 
-<div dir="ltr">
+## دو مسیر استقرار
 
-```bash
-npm run dev
-npm run build
-npm run preview
-npm run lint
-```
+در Cloudflare ابتدا Worker سیگنالینگ را با `npm run deploy:signaling` و سپس رابط Pages را با `npm run deploy:pages` منتشر کنید. اتصال `SIGNALING` درخواست‌های WebSocket را از Pages به Durable Object کلاس `SignalingRoom` می‌فرستد. فرانت‌اند استاتیک به‌تنهایی سیگنالینگ فراهم نمی‌کند.
 
-</div>
+برای میزبانی Node، ابتدا `npm run build` و سپس `npm start` را پشت پراکسی HTTPS/WSS اجرا کنید. TURN اختیاری است اما بعضی شبکه‌های محدود به آن نیاز دارند. `TURN_URL` را همراه `TURN_SHARED_SECRET` برای اعتبارنامهٔ موقت یا با ترکیب جایگزین `TURN_USERNAME` و `TURN_CREDENTIAL` تنظیم کنید.
 
-این‌ها فرمان‌های موجود در package.json هستند؛ فهرست بالا گزارش اجرای آزمون نیست. فرمان تست ممکن است مرورگر، سرویس یا دیتابیس آماده بخواهد.
+[استقرار Cloudflare و Node](DEPLOYMENT.fa.md) · [پیاده‌سازی](IMPLEMENTATION.fa.md) · [SEO](SEO.md) · [کد انتقال](src/) · [کد Worker](cloudflare/)
 
-<a id="استقرار"></a>
+رابط فارسی و انگلیسی، راست‌به‌چپ، پوسته‌های روشن و تاریک، پیمایش با کیبورد و کاهش حرکت را پشتیبانی می‌کند.
 
-## 🌍 استقرار
-
-خروجی build را مطابق معماری منتشر کنید: پروژه دارای server به فرایند Node نیاز دارد؛ رابط Vite استاتیک می‌تواند از dist میزبانی شود. توابع Pages، KV یا D1 به تنظیم مستقل نیاز دارند.
-
-<a id="محدودیت‌ها"></a>
-
-## 📌 محدودیت‌ها
-
-استقرار فایل‌های استاتیک روی Pages، سرور WebSocket را میزبانی نمی‌کند. NAT و فایروال ممکن است اتصال مستقیم را مسدود کنند. روی هاست از HTTPS/WSS استفاده و برای داده حساس رمزنگاری را بررسی کنید.
-
-<a id="رفع-مشکل"></a>
-
-## 🛠️ رفع مشکل
-
-- پکیج غایب: وابستگی را با مدیر پکیج پروژه نصب کنید.
-- خطای API یا شبکه: آدرس، سرویس و اتصال میزبانی را بررسی کنید.
-- فایل قدیمی: در صورت وجود اسکریپت ساخت، build و کش مرورگر را تازه کنید.
-
-<a id="مشارکت"></a>
-
-## 🤝 مشارکت
-
-برای تغییر، شاخه مستقل بسازید، رفتار فعلی را بررسی کنید و توضیح روشن همراه تغییر بفرستید. اطلاعات خصوصی، خروجی build و دیتابیس محلی را commit نکنید.
-
-<a id="مجوز"></a>
-
-## 📄 مجوز
-
-فایل مجوز در این نسخه موجود نیست. نمایش عمومی کد به‌تنهایی مجوز استفاده مجدد نیست؛ برای شرایط استفاده با مالک مخزن هماهنگ کنید.
-
----
-
-ساخته‌شده در مجموعه **PIMX** · مستندات فارسی و انگلیسی.
-
----
-
-<div align="center">
-
-🔗 **PIMX NODE** · [English](README.md) · [فارسی](README.fa.md)
-
-</div>
-
-</div>
+[GitHub](https://github.com/MOHAMMADREZAABEDINPOOR/PIMX_NODE) · [PIMX](https://github.com/MOHAMMADREZAABEDINPOOR) · [Portfolio](https://pimx.pages.dev/)
